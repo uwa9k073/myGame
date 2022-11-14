@@ -21,10 +21,10 @@ void Enemy::FindTarget(QList<QGraphicsItem *> listOfTarget, Player *player)
             minIndex = i;
         }
     }
-    if ((this->r<player->getRadius()) || (minDistance < this->GetDistanceTo(player))){
+    if ((this->r < player->getRadius()) || (minDistance < this->GetDistanceTo(player))){
         this->typeOfTarget = 'f';
         this->SetTarget(listOfTarget[minIndex]);
-    } else if ((minDistance>this->GetDistanceTo(player)) && (this->r>player->getRadius())){
+    } else if ((minDistance > this->GetDistanceTo(player)) && (this->r > player->getRadius())){
         this->typeOfTarget = 'p';
         this->SetTarget(player);
     }

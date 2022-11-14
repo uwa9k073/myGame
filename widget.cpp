@@ -21,7 +21,7 @@ Widget::Widget(QWidget *parent) :
     ui->grV->setRenderHint(QPainter::Antialiasing);    /// Устанавливаем сглаживание
     ui->grV->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по вертикали
     ui->grV->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по горизонтали
-    connect(ui->grV, SIGNAL(Mouse_Pos()), this, SLOT(Mouse_current_pos));
+    connect(ui->grV, SIGNAL(Mouse_Pos()), this, SLOT(Mouse_current_pos()));
     connect(ui->grV, SIGNAL(Mouse_Press()), this, SLOT(Mouse_Pressed()));
     connect(ui->grV, SIGNAL(MouseLeft()), this, SLOT(Mouse_Left()));
 
@@ -29,12 +29,12 @@ Widget::Widget(QWidget *parent) :
 
     scene->setSceneRect(-550,-300,550,300); /// Устанавливаем область графической сцены
 
-    //timer = new QTimer();
+    timer = new QTimer();
     timerCreateFood = new QTimer();
     updateEnemyTargetTimer = new QTimer();
 
 
-    gameState = 0;
+    gameState = GAME_STOPED;
 }
 
 Widget::~Widget()
@@ -94,7 +94,7 @@ void Widget::on_pushButton_clicked(){
     timerCreateFood->start(1000);
 
 
-    gameState = 1;
+    gameState = GAME_STARTED;
     ui->pushButton->setEnabled(false);
 }
 
