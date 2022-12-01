@@ -2,15 +2,15 @@
 #define WIDGET_H
 
 #include <QWidget>
-#include <QGraphicsScene>
-#include <QTimer>
-#include <QShortcut>
+//#include <QGraphicsScene>
+//#include <QTimer>
+//#include <QShortcut>
 
 
 #include <baseCircle.h>
 #include <Player.h>
 #include <Enemy.h>
-
+#include <Map.h>
 
 #define GAME_STOPED 0
 #define GAME_STARTED 1
@@ -28,29 +28,17 @@ public:
     ~Widget();
 
 public slots:
-    void slotCreateFood();
-    void slotDeleteFood(QGraphicsItem * item);
-    void on_pushButton_clicked();               // Слот для запуска игры
-    void Mouse_current_pos();
-    void Mouse_Pressed();
-    void Mouse_Left();
-    void slotUpdateTarget();
+//    void slotCreateFood();
+//    void slotDeleteFood(QGraphicsItem * item);
+    void on_pushButton_clicked(); // Слот для запуска игры
+    void gameFinish();
+//    void Mouse_current_pos();
 
 private:
     Ui::Widget *ui;
-    QGraphicsScene  *scene; // Объявляем графическую сцену
-    QTimer *timerCreateFood;
-
-    Enemy *enemy;
-    QTimer *updateEnemyTargetTimer;
-
-    Player *user;
-    QTimer *timer;
-
-    QList<QGraphicsItem *> listOfFood;
+    Map *map;
+    QTimer *checkingForGameOverTimer;
     int gameState;
-
-//    Player        *user;  //игрок
-//    QTimer          *timer; //таймер игрока
 };
+
 #endif // WIDGET_H

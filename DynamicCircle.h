@@ -9,6 +9,10 @@
 #include <QtMath>
 #include <baseCircle.h>
 
+constexpr double SPEED_FACTOR = (-1.0)/(32.0);
+constexpr double MINIMUM_SPEED = 0.5;
+constexpr double ADDITIONAL_SPEED_FACTOR = 2.5;
+
 
 class DynamicCircle: public baseCircle{
     Q_OBJECT
@@ -16,14 +20,8 @@ public:
     explicit DynamicCircle(QObject *parent = 0);
     ~DynamicCircle();
     void Move(QPointF p);
-    void MoveToPoint(QGraphicsItem *p);
-    void SetTarget(QGraphicsItem *tmp);
-    void MoveToTarget();
-    QGraphicsItem* GetTarget();
-signals:
-public slots:
-protected:
-    QGraphicsItem *target;
+    double speed() const;
+    bool isBiggerThenOtherCircle(const baseCircle* tmp);
 };
 
 #endif // DYNAMICCIRCLE_H

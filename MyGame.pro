@@ -9,21 +9,22 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    CircleFactory.cpp \
     DynamicCircle.cpp \
     Enemy.cpp \
+    Map.cpp \
     Player.cpp \
     baseCircle.cpp \
     main.cpp \
-    myqgraphicsview.cpp \
     widget.cpp
 
 HEADERS += \
-    DynamicCircle.h \
+    CircleFactory.h \
     DynamicCircle.h \
     Enemy.h \
+    Map.h \
     Player.h \
     baseCircle.h \
-    myqgraphicsview.h \
     widget.h
 
 FORMS += \

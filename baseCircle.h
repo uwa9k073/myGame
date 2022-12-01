@@ -6,31 +6,44 @@
 #include <QGraphicsScene>
 #include <QPainter>
 
-class baseCircle : public QObject, public QGraphicsItem
+const int BOARD_WIDTH = 1100;
+const int BOARD_HEIGHT = 600;
+const int QRECT_SCALE = 2;
+
+class baseCircle : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
 public:
     explicit baseCircle(QObject *parent = 0);
     ~baseCircle();
-    void setRadius(int _r) { r = _r; }
-    void setNOfColor(int _nOfColor) { nOfColor = _nOfColor; }
-    int getRadius() { return r; }
-    int getNColor() { return nOfColor; }
-    void setPos(QPointF _p) { this->pos() = _p; }
-    void setPos(int _x, int _y)
-    {
-        this->setX(_x);
-        this->setY(_y);
-    }
     double GetDistanceTo(baseCircle *tmp);
     bool HasCollisionWith(baseCircle *tmp);
+    qreal getXpos() const;
+    qreal getYpos() const;
+
+    int getRadius() const;
+    void setRadius(int newRadius);
+
+    int getNumerOfColor() const;
+    void setNumerOfColor(int newNumerOfColor);
+
+    void setXpos(qreal newXpos);
+
+    void setYpos(qreal newYpos);
+
+    int getScore() const;
+    void setScore(int newScore);
+
 signals:
 
 public slots:
 
 protected:
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    int r, nOfColor;
+    QPainterPath shape() const override ; // return shape of the cell
+    QRectF boundingRect() const override ; // determine rectangle in which cell is painted in it
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    int radius, numerOfColor, score;
+    qreal Xpos, Ypos;
+    double GetDistanceTo(QPointF tmp);
 };
 #endif

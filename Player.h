@@ -1,14 +1,13 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QObject>
 #include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QPainter>
-#include <QGraphicsSceneMouseEvent>
-#include <QDebug>
-#include <QCursor>
 #include <DynamicCircle.h>
+
+const int DISPLACEMENT_X = 11;
+const int DISPLACEMENT_Y = 4;
+
+
 
 
 class Player: public DynamicCircle{
@@ -16,11 +15,19 @@ class Player: public DynamicCircle{
 public:
     explicit Player(QObject *parent = 0);
     ~Player();
+    double speed() const;
+    void mouseMove(qreal _x, qreal _y);
+//    void setListOfCircles(const QList<QGraphicsEllipseItem *> &newListOfCircles);
+
+    QPointF getCursorVector() const;
+
 signals:
-    void signalCheckItem(QGraphicsItem *item);
+    void signalCheckItem(QGraphicsEllipseItem *item);
 public slots:
-   void slotGameTimer(); /// Слот, который отвечает за обработку перемещения треугольника
+//   void slotGameTimer(); /// Слот, который отвечает за обработку перемещения треугольника
 private:
+   QPointF cursorVector;
+//   QList<QGraphicsEllipseItem*> listOfCircles;
 
 //    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 //    void mousePressEvent(QGraphicsSceneMouseEvent *event);
