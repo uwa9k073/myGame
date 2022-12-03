@@ -13,25 +13,13 @@ Map* Map::mapPtr = nullptr;
 // Map Constructor
 Map::Map()
 {
-    connect(player, &Player::signalCheckItem, this, &Map::slotDeleteFood);
+    timerCreateFood = new QTimer();
+    connect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);
+    foodList.append(CircleFactory::getInstance()->createBaseCircle(randomBetween(131,769),randomBetween(231,269), 10, 1));
+    enemy = new Enemy(randomBetween(31,1069),randomBetween(31,569),20,3);
+    addItem(enemy);
     connect(enemy, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
-
 }
-
-char Map::getWhoWin() const
-{
-    return whoWin;
-}
-// end constructor
-
-// Map destructor
-Map::~Map()
-{
-    delete timer; // delete timer pointer
-
-    delete mapPtr; // delete mapPtr pointer
-}
-// end destructor
 
 // getInstance return a pointer to Map's object
 Map* Map::getInstance()
@@ -44,32 +32,30 @@ Map* Map::getInstance()
 }
 // end getInstance function
 
-// overloading advance function of QGraphicsScene for handle animation
-void Map::advance()
+// Map destructor
+Map::~Map()
 {
-//    movePlayer(player->getCursorVector().x(), player->getCursorVector().y());
-//    moveEnemy(enemy->getTarget());
-    for(int i = 0; i < foodList.size(); ++i){
-        if (foodList[i]->HasCollisionWith(player)){
-            updatePlayer(foodList[i]->getRadius(), foodList[i]->getScore());
-            emit player->signalCheckItem(foodList[i]);
-        }
-        if (foodList[i]->HasCollisionWith(enemy)){
-            updateEnemy(foodList[i]->getRadius(), foodList[i]->getScore());
-            emit enemy->signalCheckItem(foodList[i]);
-        }
-        if (player->HasCollisionWith(enemy)){
-            if(player->getRadius()>=enemy->getRadius()){
-                whoWin = 'p';
-            } else{
-                whoWin = 'e';
-            }
-        }
-    }
+    delete timer; // delete timer pointer
+    delete timerCreateFood;
 
-    getInstance()->update(); // update scene after timeout signal emits
+    delete mapPtr; // delete mapPtr pointer
 }
-//end advance function
+// end destructor
+
+void Map::gameStart()
+{
+//    player = new Player();
+//    player->setRadius(30);
+//    player->setNumerOfColor(2);
+//    addItem(player);
+//    player->setPos(100.0, 100.0);
+//     initialize timer
+//    connect(player, &Player::signalCheckItem, this, &Map::slotDeleteFood);
+    timerCreateFood->start(FRAME_MS*2);
+    timer = new QTimer(); // create an object from QTimer class
+    connect( timer, &QTimer::timeout, this, &Map::advance); // connect timeout() to advance()
+    timer -> start( FRAME_MS ); // emit the timeout() signal at FRAME_MS constant
+}
 
 
 void Map::gameFinished()
@@ -83,10 +69,52 @@ void Map::gameFinished()
     player->deleteLater();
 }
 
+// overloading advance function of QGraphicsScene for handle animation
+void Map::advance()
+{
+//    movePlayer(player->getCursorVector().x(), player->getCursorVector().y());
+//    updateEnemyTarget();
+    enemy->advance();
+    for(int i = 0; i < foodList.size(); ++i){
+//        if (foodList[i]->HasCollisionWith(player)){
+//            updatePlayer(foodList[i]->getRadius(), foodList[i]->getScore());
+//            emit player->signalCheckItem(foodList[i]);
+//        }
+        if (foodList[i]->HasCollisionWith(enemy)){
+            updateEnemy(foodList[i]->getRadius()/2, foodList[i]->getScore()/2);
+            emit enemy->signalCheckItem(foodList[i]);
+        }
+//        if (player->HasCollisionWith(enemy)){
+//            if(player->getRadius()>=enemy->getRadius()){
+//                whoWin = 'p';
+//            } else{
+//                whoWin = 'e';
+//            }
+//        }
+    }
+
+    getInstance()->update(); // update scene after timeout signal emits
+}
+//end advance function
+
+
+
+
+
 void Map::slotCreateFood()
 {
-    getNewFood(randomBetween(0,100),randomBetween(0,100));
+    getNewFood(randomBetween(31,1069),randomBetween(31,569));
 }
+
+// getNewFood add more food to map
+void Map::getNewFood( qreal x, qreal y)
+{
+    baseCircle* food = CircleFactory::getInstance() -> createBaseCircle(x, y, 10, 1); // creates an object from food class
+    addItem( food ); // add food item to scene
+    foodList.append( food ); // add food item to foodList
+//    if (foodList.size() == 1) enemy->setTarget(foodList[0]);
+}
+// end getNewFood
 
 void Map::slotDeleteFood(QGraphicsEllipseItem *item)
 {
@@ -95,47 +123,61 @@ void Map::slotDeleteFood(QGraphicsEllipseItem *item)
             this->removeItem(el);
             foodList.removeOne(el);
             delete el;
+            updateEnemyTarget();
         }
     }
+//    updateEnemyTarget();
 
 }
 
-void Map::gameStart()
+// update bot position
+void Map::moveEnemy(baseCircle* tmp)
 {
-    player = new Player();
-    player->setRadius(30);
-    player->setNumerOfColor(2);
-    addItem(player);
-    player->setPos(100.0, 100.0);
+            qreal dx = tmp->getXpos()-enemy->getXpos();
+            qreal dy = tmp->getYpos()-enemy->getYpos();
+            enemy->setPos(enemy->pos()+QPointF(dx,dy));
+            enemy->setYpos(enemy->getXpos()+dx);
+            enemy->setYpos(enemy->getYpos()+dy);
+}
+// update bot radius and score
+void Map::updateEnemy(int r, int ds)
+{
+            enemy->setScore(enemy->getScore() + ds);
+            enemy->setRadius(enemy->getRadius() + r);
+}
 
-
-    // initialize timer
-    timer = new QTimer(); // create an object from QTimer class
-    connect( timer, &QTimer::timeout, this, &Map::advance); // connect timeout() to advance()
-    timer -> start( FRAME_MS ); // emit the timeout() signal at FRAME_MS constant
-
-    timerCreateFood = new QTimer();
-    connect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);
-    timerCreateFood->start(FRAME_MS);
-
+void Map::updateEnemyTarget()
+{
+    if (enemy->HasCollisionWith(enemyTarget)){
+    double minDistance = enemy->GetDistanceTo(foodList[0]);
+    int minIndex = 0;
+    for (int i = 0; i < foodList.size(); ++i){
+        if (enemy->GetDistanceTo(foodList[i])<minDistance){
+            minDistance = enemy->GetDistanceTo(foodList[i]);
+            minIndex = i;
+        }
+    }/*
+    if (minDistance<enemy->GetDistanceTo(player)){
+        enemy->setTarget(foodList[minIndex]);
+    } else{
+        enemy->setTarget(player);
+    }*/
+    enemyTarget = foodList[minIndex];
+    }
+    if (enemyTarget)
+    {
+        enemy->setTargetPos(enemyTarget->pos());
+    }
 }
 
 // mouseMoveEvent handle mouse movement event
-void Map::mouseMoveEvent( QGraphicsSceneMouseEvent *event )
-{
-    // take mouse x and y position
-    player->mouseMove(event->scenePos().x() / VIEW_SCALE, event->scenePos().y() / VIEW_SCALE);
+//void Map::mouseMoveEvent( QGraphicsSceneMouseEvent *event )
+//{
+//    // take mouse x and y position
+//    player->mouseMove(event->scenePos().x() / VIEW_SCALE, event->scenePos().y() / VIEW_SCALE);
 
-}
+//}
 // end mouseMoveEvent
-
-// update bot position
-void Map::moveEnemy(QGraphicsEllipseItem* tmp)
-{
-            enemy->setXpos(tmp->x());
-            enemy->setYpos(tmp->y());
-            enemy->setPos( enemy->getXpos(), enemy->getYpos());
-}
 
 // update player position
 void Map::movePlayer(qreal x , qreal y)
@@ -153,70 +195,16 @@ void Map::updatePlayer(qreal r, int ds)
     player->setRadius(player->getRadius()+r);
 }
 
-// update player that eject food
-//void Map::playerEjectFood(QString id)
-//{
-//    for(int i = 0; i < playerList.size(); i++)
-//    {
-//        if( playerList[i]->getName() == id )
-//        {
-//            playerList[i]->score_ -= 12; // 9 is radius of ejected food
-//            playerList[i]->radius_ =( ( playerList[i]->score_ / 5 ) + 17 ); // each 5 points lenghten radius
 
-//            break;
-//        }
-//    }
-//}
-
-// remove eaten ejected food
-//void Map::removeEjectedFood(QString x , QString y)
-//{
-//    for( int k = 0; k < ejectedFoodList.size(); k++ )
-//    {
-//        if( ejectedFoodList[k]->getYPosition() == y.toDouble() && ejectedFoodList[k]->getXPosition() == x.toDouble())
-//        {
-//            removeItem(ejectedFoodList[k]);
-//            ejectedFoodList.removeOne(ejectedFoodList[k]);
-//        }
-//    }
-//}
-
-// update bot radius and score
-void Map::updateEnemy(qreal r, int ds)
+//getter to gameFinish
+char Map::getWhoWin() const
 {
-            enemy->setScore(enemy->getScore() + ds);
-            enemy->setRadius(enemy->getRadius() + r);
-}
-
-void Map::updateEnemyTarget()
-{
-    double minDistance = enemy->GetDistanceTo(foodList[0]);
-    int minIndex = 0;
-    for (int i = 0; i < foodList.size(); ++i){
-        if (enemy->GetDistanceTo(foodList[i])<minDistance){
-            minDistance = enemy->GetDistanceTo(foodList[i]);
-            minIndex = i;
-        }
-    }
-    if (minDistance<enemy->GetDistanceTo(player)){
-        enemy->setTarget(foodList[minIndex]);
-    } else{
-        enemy->setTarget(player);
-    }
-}
-
-// getNewFood add more food to map
-void Map::getNewFood( qreal x, qreal y)
-{
-    baseCircle* food = CircleFactory::getInstance() -> createBaseCircle(x, y); // creates an object from food class
-    addItem( food ); // add food item to scene
-    foodList.append( food ); // add food item to foodList
+    return whoWin;
 }
 
 
-// end getNewFood
-
-//// add new virus to scene
+//Maybe this will be realized
+// add new virus to scene
 //void Map::getNewVirus( QString x, QString y)
 //{
 //    Virus* virus = CellsFactory::getInstance() -> createVirus( x, y); // creates an object from virus class

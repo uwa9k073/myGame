@@ -1,14 +1,20 @@
 #include "DynamicCircle.h"
 
-DynamicCircle::DynamicCircle(QObject *parent) : baseCircle(parent) {}
+DynamicCircle::DynamicCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : baseCircle(_xpos, _ypos, _radius, _numerOfColor,parent) {
+
+}
 
 DynamicCircle::~DynamicCircle() {}
 
-void DynamicCircle::Move(QPointF p)
+void DynamicCircle::MoveToPoint(QPointF p)
 {
-    setXpos(p.x());
-    setYpos(p.y());
-    this->setPos(Xpos, Ypos);
+//    setXpos(p.x());
+//    setYpos(p.y());
+//    this->setPos(Xpos, Ypos);
+    double alpha = atan2(p.y() - Ypos, p.x()-Xpos);
+    double dx = speed() * cos(alpha* (M_PI/180));
+    double dy = speed() * sin(alpha* (M_PI/180));
+    moveBy(dx, dy);
 }
 
 double DynamicCircle::speed() const

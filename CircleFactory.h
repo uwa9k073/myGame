@@ -12,9 +12,9 @@ public:
     ~CircleFactory();
 
 
-    baseCircle* createBaseCircle(qreal _x, qreal _y);
-    Player* createPlayer(qreal _x, qreal _y);
-    Enemy* createEnemy(qreal _x, qreal _y);
+    baseCircle* createBaseCircle(qreal _x, qreal _y, int _radius, int _numerOfColor);
+    Player* createPlayer(qreal _x, qreal _y, int _radius, int _numerOfColor);
+    Enemy* createEnemy(qreal _x, qreal _y, int _radius, int _numerOfColor);
 private:
     static CircleFactory* circleFactoryPtr;
 };

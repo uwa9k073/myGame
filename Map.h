@@ -28,8 +28,8 @@ public:
 
 //    void getNewVirus( QString, QString ); // adding new virus
 
-    void moveEnemy(QGraphicsEllipseItem* tmp); // move enemy
-    void updateEnemy(qreal, int); // update enemy info
+    void moveEnemy(baseCircle* tmp); // move enemy
+    void updateEnemy(int, int); // update enemy info
     void updateEnemyTarget();
 
     void movePlayer(qreal, qreal); // move player
@@ -39,6 +39,7 @@ public:
     char getWhoWin() const;
     void gameStart();
     void gameFinished();
+
 
 signals:
     void signalGameOver();
@@ -55,7 +56,7 @@ protected:
 
     // events function
 //    void keyPressEvent(QKeyEvent *event) override ;
-    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
+//    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
 
 private:
     Map(); // Map constructor
@@ -68,6 +69,7 @@ private:
     Enemy* enemy;
     Player* player;
     char whoWin;
+    baseCircle *enemyTarget;
 
 
 };

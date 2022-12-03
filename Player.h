@@ -13,7 +13,7 @@ const int DISPLACEMENT_Y = 4;
 class Player: public DynamicCircle{
     Q_OBJECT
 public:
-    explicit Player(QObject *parent = 0);
+    explicit Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
     ~Player();
     double speed() const;
     void mouseMove(qreal _x, qreal _y);

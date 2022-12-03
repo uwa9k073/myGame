@@ -33,6 +33,11 @@ void Widget::gameFinish()
     }
 }
 
+void Widget::updatePos()
+{
+//    ui->label_2->setText("X: "+QString::number(map->getEnemyPos().x()) + ", Y: "+QString::number(map->getEnemyPos().y()));
+}
+
 
 void Widget::on_pushButton_clicked(){
 
@@ -41,13 +46,18 @@ void Widget::on_pushButton_clicked(){
     ui->grV->setRenderHint(QPainter::Antialiasing);    /// Устанавливаем сглаживание
     ui->grV->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по вертикали
     ui->grV->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по горизонтали
+       map->setSceneRect(0,0,1100,600); /// Устанавливаем область графической сцены
+    map->gameStart();
 
     checkingForGameOverTimer = new QTimer();
     connect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::gameFinish);
-    map->setSceneRect(-550,-300,550,300); /// Устанавливаем область графической сцены
-    ui->grV->setMouseTracking(true);
+//    connect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::updatePos);
+    checkingForGameOverTimer->start(10);
+
+//    ui->grV->setMouseTracking(true);
     gameState = GAME_STARTED;
     ui->pushButton->setEnabled(false);
 }
+
 
 

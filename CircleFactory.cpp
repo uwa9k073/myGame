@@ -16,24 +16,17 @@ CircleFactory::~CircleFactory()
     delete circleFactoryPtr;
 }
 
-baseCircle *CircleFactory::createBaseCircle(qreal _x, qreal _y)
+baseCircle *CircleFactory::createBaseCircle(qreal _x, qreal _y, int _radius, int _numerOfColor)
 {
-    baseCircle* tmp = new baseCircle;
-    tmp->setXpos(_x);
-    tmp->setYpos(_y);
-    return tmp;
+    return new baseCircle(_x, _y, _radius, _numerOfColor,0);
+}
+Player *CircleFactory::createPlayer(qreal _x, qreal _y, int _radius, int _numerOfColor)
+{
+    return new Player(_x, _y, _radius, _numerOfColor,0);
 
 }
 
-Player *CircleFactory::createPlayer(qreal _x, qreal _y)
+Enemy *CircleFactory::createEnemy(qreal _x, qreal _y,int _radius, int _numerOfColor)
 {
-    Player* tmp = new Player;
-    tmp->setXpos(_x);
-    tmp->setYpos(_y);
-    return tmp;
-}
-
-Enemy *CircleFactory::createEnemy(qreal _x, qreal _y)
-{
-    return new Enemy(_x,_y,0);
+    return new Enemy(_x,_y, _radius, _numerOfColor, 0);
 }

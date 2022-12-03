@@ -1,22 +1,28 @@
 #include "Enemy.h"
 
-Enemy::Enemy(qreal x, qreal y, int r, QObject *parent):DynamicCircle(parent){
-    setXpos(x);
-    setYpos(y);
-    setRadius(r);
-    setNumerOfColor(3);
+Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent):DynamicCircle(_xpos,_ypos,_radius, _numerOfColor,parent){
+//    setFlag(QGraphicsItem::ItemIsMovable);
+
 }
 
 Enemy::~Enemy(){
-    delete target;
 }
 
-void Enemy::setTarget(QGraphicsEllipseItem *newTarget)
+QPointF Enemy::getTargetPos() const
 {
-    target = newTarget;
+    return targetPos;
 }
 
-QGraphicsEllipseItem *Enemy::getTarget() const
+void Enemy::setTargetPos(QPointF newTargetPos)
 {
-    return target;
+    targetPos = newTargetPos;
+}
+
+void Enemy::advance(int phase)
+{
+    if (phase){
+        MoveToPoint(targetPos);
+//        moveBy(target->pos().x() - pos().x(), target->pos().y()-pos().y());
+//        moveBy(1,-0.1);
+    }
 }

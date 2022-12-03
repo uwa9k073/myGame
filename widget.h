@@ -27,11 +27,13 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+
 public slots:
 //    void slotCreateFood();
 //    void slotDeleteFood(QGraphicsItem * item);
     void on_pushButton_clicked(); // Слот для запуска игры
     void gameFinish();
+        void updatePos();
 //    void Mouse_current_pos();
 
 private:

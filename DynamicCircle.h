@@ -17,9 +17,9 @@ constexpr double ADDITIONAL_SPEED_FACTOR = 2.5;
 class DynamicCircle: public baseCircle{
     Q_OBJECT
 public:
-    explicit DynamicCircle(QObject *parent = 0);
+    explicit DynamicCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
     ~DynamicCircle();
-    void Move(QPointF p);
+    void MoveToPoint(QPointF p);
     double speed() const;
     bool isBiggerThenOtherCircle(const baseCircle* tmp);
 };

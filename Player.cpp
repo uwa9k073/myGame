@@ -1,6 +1,8 @@
 #include "Player.h"
 
-Player::Player(QObject *parent): DynamicCircle(parent){}
+Player::Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent): DynamicCircle(_xpos,_ypos,_radius, _numerOfColor,parent){
+    setFlag(QGraphicsItem::ItemIsFocusable);
+}
 
 
 Player::~Player(){}
