@@ -35,7 +35,7 @@ void Widget::gameFinish()
 
 void Widget::updatePos()
 {
-//    ui->label_2->setText("X: "+QString::number(map->getEnemyPos().x()) + ", Y: "+QString::number(map->getEnemyPos().y()));
+    ui->label_2->setText("X: "+QString::number(map->getEnemyTargetPos().x()) + ", Y: "+QString::number(map->getEnemyTargetPos().y()));
 }
 
 

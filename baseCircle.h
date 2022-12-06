@@ -41,8 +41,8 @@ signals:
 public slots:
 
 protected:
-    QPainterPath shape() const override ; // return shape of the cell
-    QRectF boundingRect() const override ; // determine rectangle in which cell is painted in it
+    QPainterPath shape() const override;  // return shape of the cell
+    QRectF boundingRect() const override; // determine rectangle in which cell is painted in it
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
     int radius, numerOfColor, score;
     qreal Xpos, Ypos;

@@ -8,6 +8,7 @@ baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor,
     radius = _radius;
     numerOfColor = _numerOfColor;
     score = _radius;
+//    setPos(Xpos, Ypos);
 }
 
 baseCircle::~baseCircle() {}

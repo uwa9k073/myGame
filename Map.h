@@ -12,7 +12,7 @@
 #include "CircleFactory.h"
 
 constexpr int VIEW_SCALE = 2; // view scale constant
-constexpr int FRAME_MS = 120; // frame millisecond constant
+constexpr int FRAME_MS = 1000; // frame millisecond constant
 
 // Class map handle QGraphicsScene items
 class Map : public QGraphicsScene
@@ -31,6 +31,7 @@ public:
     void moveEnemy(baseCircle* tmp); // move enemy
     void updateEnemy(int, int); // update enemy info
     void updateEnemyTarget();
+    void checkIfEscapeOrFollow(baseCircle* cell, int viewDis);
 
     void movePlayer(qreal, qreal); // move player
     void updatePlayer(qreal, int); // update player info
@@ -39,7 +40,7 @@ public:
     char getWhoWin() const;
     void gameStart();
     void gameFinished();
-
+    QPointF getEnemyTargetPos() const;
 
 signals:
     void signalGameOver();
@@ -48,7 +49,7 @@ public slots:
     void slotCreateFood();
     void slotDeleteFood(QGraphicsEllipseItem*);
 
-    void advance();  // this function is overloaded from QGraphicsScene for handle animation thing
+    void gameSlot();  // this function is overloaded from QGraphicsScene for handle animation thing
 
 
 protected:
@@ -69,7 +70,6 @@ private:
     Enemy* enemy;
     Player* player;
     char whoWin;
-    baseCircle *enemyTarget;
 
 
 };

@@ -1,28 +1,44 @@
 #include "Enemy.h"
+#include <iostream>
 
-Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent):DynamicCircle(_xpos,_ypos,_radius, _numerOfColor,parent){
-//    setFlag(QGraphicsItem::ItemIsMovable);
-
-}
-
-Enemy::~Enemy(){
-}
-
-QPointF Enemy::getTargetPos() const
+Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : DynamicCircle(_xpos, _ypos, _radius, _numerOfColor, parent)
 {
-    return targetPos;
+    //    setFlag(QGraphicsItem::ItemIsMovable);
+    target=nullptr;
 }
 
-void Enemy::setTargetPos(QPointF newTargetPos)
+Enemy::~Enemy()
 {
-    targetPos = newTargetPos;
+    delete target;
 }
 
-void Enemy::advance(int phase)
+
+baseCircle *Enemy::getTarget() const
 {
-    if (phase){
-        MoveToPoint(targetPos);
-//        moveBy(target->pos().x() - pos().x(), target->pos().y()-pos().y());
-//        moveBy(1,-0.1);
+    return target;
+}
+
+void Enemy::setTarget(baseCircle *newTarget)
+{
+    target = newTarget;
+}
+
+void Enemy::findTarget(QList<baseCircle *> listOfTarget)
+{
+    double minDistance = GetDistanceTo(listOfTarget[0]);
+    int minIndex = 0;
+    for (int i = 0; i < listOfTarget.size(); ++i){
+        if (GetDistanceTo(listOfTarget[i])<minDistance){
+            minDistance = GetDistanceTo(listOfTarget[i]);
+            minIndex = i;
+        }
     }
+    target = listOfTarget[minIndex];
 }
+
+void Enemy::MoveToTarget()
+{
+    MoveToPoint(target->pos());
+}
+
+

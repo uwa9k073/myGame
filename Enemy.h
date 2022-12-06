@@ -10,13 +10,14 @@ public:
     ~Enemy();
 
 
+    baseCircle *getTarget() const;
+    void setTarget(baseCircle *newTarget);
+    void findTarget(QList<baseCircle*>);
+    void MoveToTarget();
 signals:
     void signalCheckItem(QGraphicsEllipseItem *item);
 private:
-    QPointF targetPos;
-public:
-    virtual void advance(int phase = 1);
-    QPointF getTargetPos() const;
-    void setTargetPos(QPointF newTargetPos);
+    baseCircle *target;
+
 };
 #endif // ENEMY_H
