@@ -1,10 +1,9 @@
 #include "Enemy.h"
-#include <iostream>
+
 
 Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : DynamicCircle(_xpos, _ypos, _radius, _numerOfColor, parent)
 {
     //    setFlag(QGraphicsItem::ItemIsMovable);
-    target=nullptr;
 }
 
 Enemy::~Enemy()
@@ -28,17 +27,18 @@ void Enemy::findTarget(QList<baseCircle *> listOfTarget)
     double minDistance = GetDistanceTo(listOfTarget[0]);
     int minIndex = 0;
     for (int i = 0; i < listOfTarget.size(); ++i){
-        if (GetDistanceTo(listOfTarget[i])<minDistance){
+        if (GetDistanceTo(listOfTarget[i])<=minDistance){
             minDistance = GetDistanceTo(listOfTarget[i]);
             minIndex = i;
         }
     }
     target = listOfTarget[minIndex];
+    std::cout << target<< ' ' << minIndex << ' ' << minDistance << ' ' << target->pos().x() << ", " <<target->pos().y() <<'\n';
 }
 
 void Enemy::MoveToTarget()
 {
-    MoveToPoint(target->pos());
+    MoveToPoint(target);
 }
 
 

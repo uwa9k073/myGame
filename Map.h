@@ -67,6 +67,7 @@ private:
     QTimer* timer; // A pointer that hold time
     QTimer* timerCreateFood;
     QList<baseCircle*> foodList;
+//    QList<>
     Enemy* enemy;
     Player* player;
     char whoWin;

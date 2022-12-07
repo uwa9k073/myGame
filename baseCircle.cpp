@@ -3,20 +3,20 @@
 #include <iostream>
 
 baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : QObject(parent), QGraphicsEllipseItem() {
-    Xpos = _xpos;
-    Ypos = _ypos;
+//    Xpos=_xpos;
+//    Ypos=_ypos;
     radius = _radius;
     numerOfColor = _numerOfColor;
     score = _radius;
-//    setPos(Xpos, Ypos);
+    setPos(_xpos, _ypos);
 }
 
 baseCircle::~baseCircle() {}
 
 double baseCircle::GetDistanceTo(baseCircle *tmp)
 {
-    double d_x = pow(Xpos - tmp->getXpos(), 2);
-    double d_y = pow(Ypos - tmp->getYpos(), 2);
+    double d_x = pow(pos().x() - tmp->pos().x(), 2);
+    double d_y = pow(pos().y() - tmp->pos().y(), 2);
     return sqrt(d_x + d_y);
 }
 
@@ -28,8 +28,12 @@ double baseCircle::GetDistanceTo(QPointF tmp){
 
 bool baseCircle::HasCollisionWith(baseCircle *tmp)
 {
-    return (GetDistanceTo(tmp->pos()) <= static_cast<double>(radius + tmp->getRadius()));
+    if ((GetDistanceTo(tmp))<(radius+tmp->getRadius()))
+        return true;
+    return false;
 }
+
+
 
 QRectF baseCircle::boundingRect() const
 {
@@ -98,13 +102,6 @@ void baseCircle::setNumerOfColor(int newNumerOfColor)
 {
     numerOfColor = newNumerOfColor;
 }
-
-//QPainterPath baseCircle::shape() const
-//{
-//    QPainterPath path; // create an object of QPainterPath
-//    path.addEllipse( boundingRect() ); // add an ellipse to this object via given boundary and size
-//    return path; // return the object
-//}
 
 int baseCircle::getRadius() const
 {

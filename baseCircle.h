@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QtMath>
-
+#include <iostream>
 const int BOARD_WIDTH = 1100;
 const int BOARD_HEIGHT = 600;
 const int QRECT_SCALE = 2;
@@ -19,7 +19,6 @@ public:
     explicit baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
     ~baseCircle();
     double GetDistanceTo(baseCircle *tmp);
-    bool HasCollisionWith(baseCircle *tmp);
     qreal getXpos() const;
     qreal getYpos() const;
 
@@ -35,6 +34,7 @@ public:
 
     int getScore() const;
     void setScore(int newScore);
+    bool HasCollisionWith(baseCircle*);
 
 signals:
 

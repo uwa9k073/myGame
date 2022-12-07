@@ -8,9 +8,28 @@ DynamicCircle::~DynamicCircle() {}
 
 void DynamicCircle::MoveToPoint(QPointF p)
 {
-    double alpha = atan2(p.y() - Ypos, p.x() - Xpos);
-    double dx = speed() * cos(alpha * (M_PI / 180));
-    double dy = speed() * sin(alpha * (M_PI / 180));
+    double alpha = atan2(p.y() - pos().y(), p.x() - pos().x())/M_PI;
+    setRotation(alpha);
+    qreal dx = speed() * cos(alpha * (M_PI / 180));
+    qreal dy = speed() * sin(alpha * (M_PI / 180));
+    moveBy(dx, dy);
+}
+
+void DynamicCircle::MoveToPoint(baseCircle *tmp)
+{
+    double alpha = atan2(tmp->pos().y() - pos().y(), tmp->pos().x() - pos().x());
+//    setRotation(alpha);
+    qreal dx = speed() * cos(alpha);
+    qreal dy = speed() * sin(alpha);
+    std::cout << "dx: "<<dx << ", dy: "<<dy<<'\n';
+    moveBy(dx,dy);
+}
+
+void DynamicCircle::MoveToPoint(qreal x, qreal y)
+{
+    double alpha = atan2(y - Ypos, x - Xpos);
+    qreal dx = 2 * cos(alpha * (M_PI / 180));
+    qreal dy = 2 * sin(alpha * (M_PI / 180));
     moveBy(dx, dy);
 }
 
@@ -24,5 +43,5 @@ double DynamicCircle::speed() const
 
 bool DynamicCircle::isBiggerThenOtherCircle(const baseCircle *tmp)
 {
-    return this->getRadius() > tmp->getRadius();
+    return radius > tmp->getRadius();
 }

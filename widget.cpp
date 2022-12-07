@@ -46,7 +46,7 @@ void Widget::on_pushButton_clicked(){
     ui->grV->setRenderHint(QPainter::Antialiasing);    /// Устанавливаем сглаживание
     ui->grV->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по вертикали
     ui->grV->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по горизонтали
-       map->setSceneRect(0,0,1100,600); /// Устанавливаем область графической сцены
+    map->setSceneRect(0,0,1200,700); /// Устанавливаем область графической сцены
     map->gameStart();
 
     checkingForGameOverTimer = new QTimer();

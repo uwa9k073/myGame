@@ -14,8 +14,7 @@ public:
     void setTarget(baseCircle *newTarget);
     void findTarget(QList<baseCircle*>);
     void MoveToTarget();
-signals:
-    void signalCheckItem(QGraphicsEllipseItem *item);
+
 private:
     baseCircle *target;
 

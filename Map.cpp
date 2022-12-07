@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+
+//getRandom func
 static qreal randomBetween(int low, int high)
 {
     return (rand() % ((high + 1) - low) + low);
@@ -13,10 +15,10 @@ Map *Map::mapPtr = nullptr;
 Map::Map()
 {
     for (int i = 0; i < 50; ++i)
-        getNewFood(randomBetween(50,1050), randomBetween(50,550));
+        getNewFood(randomBetween(50, 1050), randomBetween(50, 550));
     timerCreateFood = new QTimer();
     timer = new QTimer();
-    enemy = new Enemy(randomBetween(50, 1050), randomBetween(50, 550), 5, 3);
+    enemy = new Enemy(randomBetween(50, 1050), randomBetween(50, 550), 10, 3);
 }
 
 // getInstance return a pointer to Map's object
@@ -45,14 +47,12 @@ Map::~Map()
 
 void Map::gameStart()
 {
-
-    //    connect(player, &Player::signalCheckItem, this, &Map::slotDeleteFood);
-    addItem(enemy);
-    connect(enemy, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
+    addItem(enemy);//adding enemy to graphicScene
+    connect(enemy, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);//connect signalCheckItem() to slotDeleteFood()
     connect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);
-    timerCreateFood->start(FRAME_MS);
+    timerCreateFood->start(FRAME_MS/1000);
     connect(timer, &QTimer::timeout, this, &Map::gameSlot); // connect timeout() to advance()
-    timer->start(FRAME_MS/10);                            // emit the timeout() signal at FRAME_MS constant
+    timer->start(FRAME_MS/100);
 }
 
 void Map::gameFinished()
@@ -69,30 +69,27 @@ void Map::gameFinished()
 
 QPointF Map::getEnemyTargetPos() const
 {
-    if (enemy->getTarget()!=nullptr)
+    if (enemy->getTarget() != nullptr)
         return enemy->getTarget()->pos();
-    return QPointF(-1000,-1000);
+    return QPointF(-1000, -1000);
 }
 
 // overloading advance function of QGraphicsScene for handle animation
 void Map::gameSlot()
 {
-    if (foodList.size() > 0)
-    {
         enemy->findTarget(foodList);
         enemy->MoveToTarget();
-        QString n = QString::number(foodList.size());
-        std::cout << n.toStdString() + "\n";
-    }
-    foreach (baseCircle *el, foodList)
-    {
-        if (el->HasCollisionWith(enemy))
-        {
-            updateEnemy(1,1);
-            emit enemy->signalCheckItem(el);
-        }
-    }
-    std::cout << "ok\n";
+
+//    for(int i = 0; i < foodList.size(); ++i){
+//        if(foodList[i]->HasCollisionWith(enemy)){
+//            updateEnemy(1,1);
+//            emit enemy->signalCheckItem(foodList[i]);
+//        }
+//    }
+       if (enemy->HasCollisionWith(enemy->getTarget())){
+           updateEnemy(1,1);
+           emit enemy->signalCheckItem(enemy->getTarget());
+       }
 }
 // end advance function
 
@@ -100,15 +97,15 @@ void Map::slotCreateFood()
 {
     if (foodList.size() < 100)
         getNewFood(randomBetween(31, 1069), randomBetween(31, 569));
+    enemy->findTarget(foodList);
 }
 
 // getNewFood add more food to map
 void Map::getNewFood(qreal x, qreal y)
 {
-    baseCircle *food = new baseCircle(x, y, 10, 1); // creates an object from food class
-    addItem(food);                                  // add food item to scene
-    foodList.append(food);                          // add food item to foodList
-    //    if (foodList.size() == 1) enemy->setTarget(foodList[0]);
+    baseCircle *food = CircleFactory::getInstance()->createBaseCircle(x, y, 10, 1); // creates an object from food class
+    addItem(food);// add food item to scene
+    foodList.append(food);// add food item to foodList
 }
 // end getNewFood
 
@@ -123,6 +120,8 @@ void Map::slotDeleteFood(QGraphicsEllipseItem *item)
             delete el;
         }
     }
+    std::cout<<"item is delete\n";
+//    enemy->findTarget(foodList);
 }
 
 // update bot position
@@ -137,8 +136,10 @@ void Map::moveEnemy(baseCircle *tmp)
 // update bot radius and score
 void Map::updateEnemy(int r, int ds)
 {
+    if (enemy->getScore()+ds>200){
+        whoWin = 'e';}else{
     enemy->setScore(enemy->getScore() + ds);
-    enemy->setRadius(enemy->getRadius() + r);
+    enemy->setRadius(enemy->getRadius() + r);}
 }
 // mouseMoveEvent handle mouse movement event
 // void Map::mouseMoveEvent( QGraphicsSceneMouseEvent *event )

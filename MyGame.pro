@@ -14,6 +14,7 @@ SOURCES += \
     Enemy.cpp \
     Map.cpp \
     Player.cpp \
+    Virus.cpp \
     baseCircle.cpp \
     main.cpp \
     widget.cpp
@@ -24,6 +25,7 @@ HEADERS += \
     Enemy.h \
     Map.h \
     Player.h \
+    Virus.h \
     baseCircle.h \
     widget.h
 

@@ -30,3 +30,8 @@ Enemy *CircleFactory::createEnemy(qreal _x, qreal _y,int _radius, int _numerOfCo
 {
     return new Enemy(_x,_y, _radius, _numerOfColor, 0);
 }
+
+Virus *CircleFactory::createVirus(qreal _x, qreal _y, int _radius, int _numerOfColor)
+{
+    return new Virus(_x, _y, _radius, _numerOfColor, 0);
+}
