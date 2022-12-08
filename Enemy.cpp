@@ -24,14 +24,14 @@ void Enemy::setTarget(baseCircle *newTarget)
     target = newTarget;
 }
 
-void Enemy::findTarget(QList<baseCircle *> listOfTarget/* QList<Enemy*> listOfBots*/)
+void Enemy::findTarget(QList<baseCircle *> listOfTarget/* QList<Enemy*> listOfBots*/, Player* player)
 {
-    double minDistance1 = GetDistanceTo(listOfTarget[0]) /*,minDistance2 = GetDistanceTo(listOfBots[0])*/;
-    int minIndex1 = 0/*, minIndex2 = 0*/;
+    double minDistance1 = GetDistanceTo(listOfTarget[0]) , minDistance2 = GetDistanceTo(player);
+    int minIndex1 = 0;
 
     //вычисляем расстояние до статичного кружка
     for (int i = 0; i < listOfTarget.size(); ++i){
-        if (GetDistanceTo(listOfTarget[i])<=minDistance1){
+        if (GetDistanceTo(listOfTarget[i])<=minDistance1 && isBiggerThenOtherCircle(listOfTarget[i])){
             minDistance1 = GetDistanceTo(listOfTarget[i]);
             minIndex1 = i;
         }
@@ -47,10 +47,10 @@ void Enemy::findTarget(QList<baseCircle *> listOfTarget/* QList<Enemy*> listOfBo
 //        }
 //    }
 
-//    if (minDistance1<minDistance2)
+    if (minDistance1>minDistance2 && isBiggerThenOtherCircle(player))
+        target = player;
+    else
         target = listOfTarget[minIndex1];
-//    else
-//        target = listOfTarget[minIndex2];
 }
 
 void Enemy::MoveToTarget()

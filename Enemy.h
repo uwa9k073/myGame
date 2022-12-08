@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include <DynamicCircle.h>
+#include <Player.h>
 
 class Enemy: public DynamicCircle{
     Q_OBJECT
@@ -12,7 +13,7 @@ public:
 
     baseCircle *getTarget() const;
     void setTarget(baseCircle *newTarget);
-    void findTarget(QList<baseCircle*>);
+    void findTarget(QList<baseCircle*>,Player* player);
     void MoveToTarget();
 
 private:

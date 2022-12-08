@@ -12,7 +12,7 @@ public:
     ~CircleFactory();
 
 
-    baseCircle* createBaseCircle(qreal _x, qreal _y);
+    baseCircle* createBaseCircle(qreal _x, qreal _y, int r);
     Player* createPlayer(qreal _x, qreal _y);
     Enemy* createEnemy(qreal _x, qreal _y);
     Virus* createVirus(qreal _x, qreal _y);

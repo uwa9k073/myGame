@@ -69,7 +69,7 @@ void Map::gameSlot()
 
     //find target for each enemy and chekin clollison with player
     foreach(Enemy* enemy, enemyList){
-        enemy->findTarget(foodList);
+        enemy->findTarget(foodList, player);
         enemy->MoveToTarget();
         if (enemy->HasCollisionWith(player)){
             if (enemy->isBiggerThenOtherCircle(player))
@@ -125,7 +125,7 @@ void Map::getNewEnemy(qreal x, qreal y)
 // getNewFood add more food to map
 void Map::getNewFood(qreal x, qreal y)
 {
-    baseCircle *food = CircleFactory::getInstance()->createBaseCircle(x, y); // creates an object from food class
+    baseCircle *food = CircleFactory::getInstance()->createBaseCircle(x, y,randomBetween(1, 15)); // creates an object from food class
     addItem(food);// add food item to scene
     foodList.append(food);// add food item to foodList
 }
@@ -197,7 +197,6 @@ char Map::getWhoWin() const
     return whoWin;
 }
 
-// Maybe this will be realized
 //  add new virus to scene
  void Map::getNewVirus( qreal x, qreal y)
 {
@@ -214,14 +213,15 @@ char Map::getWhoWin() const
                 whoWin='p';
             }
             else{
-            foreach(Enemy* el, enemyList){
-                if (el==item){
-                    disconnect(el, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
-                    this->removeItem(el);
-                    enemyList.removeOne(el);
-                    delete el;
+                foreach(Enemy* el, enemyList){
+                    if (el==item){
+                        disconnect(el, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
+                        this->removeItem(el);
+                        enemyList.removeOne(el);
+                        delete el;
+                    }
                 }
-            }}
+            }
         }else{
             item->updateInfo(-2);
         }
