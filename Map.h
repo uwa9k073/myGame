@@ -17,7 +17,7 @@ constexpr int FRAME_MS = 1000; // frame millisecond constant
 // Class map handle QGraphicsScene items
 class Map : public QGraphicsScene
 {
-
+//    Q_OBJECT
 public:
 
     static Map* getInstance(); // get a pointer to object
@@ -26,21 +26,20 @@ public:
     // dynamic functions
     void getNewFood(qreal, qreal); // adding new food
 
-//    void getNewVirus( QString, QString ); // adding new virus
+    void updateEnemy(Enemy*  item); // update enemy info
+    void getNewEnemy(qreal x, qreal y);//adding new enemy
 
-    void moveEnemy(baseCircle* tmp); // move enemy
-    void updateEnemy(int, int); // update enemy info
-    void updateEnemyTarget();
-    void checkIfEscapeOrFollow(baseCircle* cell, int viewDis);
+    void updatePlayer(); // update player info
+    void getNewPlayer(qreal x, qreal y);//adding new player
 
-    void movePlayer(qreal, qreal); // move player
-    void updatePlayer(qreal, int); // update player info
+    void getNewVirus(qreal x, qreal y);
 
     // A list of pointers that hold food
     char getWhoWin() const;
-    void gameStart();
+    void gameStart(int numOfEnemies);
     void gameFinished();
-    QPointF getEnemyTargetPos() const;
+
+    void punish(baseCircle* item);
 
 signals:
     void signalGameOver();
@@ -48,6 +47,7 @@ signals:
 public slots:
     void slotCreateFood();
     void slotDeleteFood(QGraphicsEllipseItem*);
+    void slotDeleteEnemy(QGraphicsEllipseItem*);
 
     void gameSlot();  // this function is overloaded from QGraphicsScene for handle animation thing
 
@@ -57,7 +57,7 @@ protected:
 
     // events function
 //    void keyPressEvent(QKeyEvent *event) override ;
-//    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
+    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
 
 private:
     Map(); // Map constructor
@@ -67,8 +67,8 @@ private:
     QTimer* timer; // A pointer that hold time
     QTimer* timerCreateFood;
     QList<baseCircle*> foodList;
-//    QList<>
-    Enemy* enemy;
+    QList<Virus* > virusList;
+    QList<Enemy*> enemyList;
     Player* player;
     char whoWin;
 

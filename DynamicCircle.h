@@ -17,16 +17,15 @@ class DynamicCircle : public baseCircle
 {
     Q_OBJECT
 public:
-    explicit DynamicCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
+    explicit DynamicCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent = 0);
     ~DynamicCircle();
     void MoveToPoint(QPointF p);
     void MoveToPoint(baseCircle* tmp);
-    void MoveToPoint(qreal x, qreal y);
     double speed() const;
     bool isBiggerThenOtherCircle(const baseCircle *tmp);
     void checkCollision();
 signals:
-    void signalCheckItem(QGraphicsEllipseItem *item);
+    void signalCheckItem(baseCircle *item);
 };
 
 #endif // DYNAMICCIRCLE_H

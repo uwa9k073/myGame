@@ -6,7 +6,7 @@
 class Enemy: public DynamicCircle{
     Q_OBJECT
 public:
-    explicit Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor,QObject *parent = 0);
+    explicit Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who,QObject *parent = 0);
     ~Enemy();
 
 

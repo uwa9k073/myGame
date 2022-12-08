@@ -1,49 +1,24 @@
 #include "Player.h"
 
-Player::Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent): DynamicCircle(_xpos,_ypos,_radius, _numerOfColor,parent){
+Player::Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who,QObject *parent):
+    DynamicCircle(_xpos,_ypos,_radius, _numerOfColor, _who, parent){
     setFlag(QGraphicsItem::ItemIsFocusable);
 }
-
-
 Player::~Player(){}
 
-
-
-void Player::mouseMove(qreal _x, qreal _y)
+QPointF Player::getCursorPos() const
 {
-    QPointF tmpVec = QPointF(_x - Xpos, _y - Ypos);
-
-    qreal dx = Xpos - _x;
-    qreal dy = Ypos - _y;
-
-    double distance = sqrt(dx*dx + dy*dy);
-
-    if (distance){
-        tmpVec /= distance;
-        cursorVector = tmpVec;
-    }
-
-    if ((cursorVector.x())||(cursorVector.y())){
-        cursorVector /=  (sqrt( cursorVector.x() * cursorVector.x() + cursorVector.y() * cursorVector.y()));
-    }
-
+    return cursorPos;
 }
 
-QPointF Player::getCursorVector() const
+void Player::setCursorPos(QPointF newCursorPos)
 {
-    return cursorVector;
+    cursorPos = newCursorPos;
 }
 
-//void Player::slotGameTimer()
-//{
-//    foreach(QGraphicsEllipseItem* item, listOfCircles){
-//        if (HasCollisionWith(dynamic_cast<baseCircle*>(item)))
-//            emit signalCheckItem(item);
-//    }
-//}
+void Player::moveToCursor()
+{
+    MoveToPoint(cursorPos);
+}
 
-//void Player::setListOfCircles(const QList<QGraphicsEllipseItem *> &newListOfCircles)
-//{
-//    listOfCircles = newListOfCircles;
-//}
 

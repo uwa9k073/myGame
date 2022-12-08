@@ -16,7 +16,7 @@ class baseCircle : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
 public:
-    explicit baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
+    explicit baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor,char _who, QObject *parent = 0);
     ~baseCircle();
     double GetDistanceTo(baseCircle *tmp);
     qreal getXpos() const;
@@ -36,6 +36,10 @@ public:
     void setScore(int newScore);
     bool HasCollisionWith(baseCircle*);
 
+    void updateInfo(int x);
+
+    char getWho() const;
+
 signals:
 
 public slots:
@@ -47,5 +51,6 @@ protected:
     int radius, numerOfColor, score;
     qreal Xpos, Ypos;
     double GetDistanceTo(QPointF tmp);
+    char who;
 };
 #endif

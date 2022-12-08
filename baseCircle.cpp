@@ -2,13 +2,14 @@
 
 #include <iostream>
 
-baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : QObject(parent), QGraphicsEllipseItem() {
+baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) : QObject(parent), QGraphicsEllipseItem() {
 //    Xpos=_xpos;
 //    Ypos=_ypos;
     radius = _radius;
     numerOfColor = _numerOfColor;
     score = _radius;
     setPos(_xpos, _ypos);
+    who = _who;
 }
 
 baseCircle::~baseCircle() {}
@@ -24,6 +25,11 @@ double baseCircle::GetDistanceTo(QPointF tmp){
     double d_x = pow(pos().x() - tmp.x(), 2);
     double d_y = pow(pos().y() - tmp.y(), 2);
     return sqrt(d_x + d_y);
+}
+
+char baseCircle::getWho() const
+{
+    return who;
 }
 
 bool baseCircle::HasCollisionWith(baseCircle *tmp)
@@ -55,13 +61,23 @@ void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     case 3:
         painter->setBrush(QBrush(Qt::red, Qt::SolidPattern));
         break;
+    case 4:
+        painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
     }
     painter->drawEllipse(boundingRect());
-    painter->setPen(Qt::black);
-    painter->drawText(Xpos-DISPLACEMENT-3, Ypos+DISPLACEMENT, QString::number(this->score));
+    if(who=='p'||who=='e'){
+        painter->setPen(Qt::black);
+        painter->drawText(Xpos-DISPLACEMENT-3, Ypos+DISPLACEMENT, QString::number(this->score));
+    }
 
     Q_UNUSED(option);
     Q_UNUSED(widget);
+}
+
+void baseCircle::updateInfo(int x)
+{
+    radius+=x;
+    score+=x;
 }
 
 int baseCircle::getScore() const

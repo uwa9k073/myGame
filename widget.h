@@ -2,14 +2,6 @@
 #define WIDGET_H
 
 #include <QWidget>
-//#include <QGraphicsScene>
-//#include <QTimer>
-//#include <QShortcut>
-
-
-#include <baseCircle.h>
-#include <Player.h>
-#include <Enemy.h>
 #include <Map.h>
 
 #define GAME_STOPED 0
@@ -29,12 +21,8 @@ public:
 
 
 public slots:
-//    void slotCreateFood();
-//    void slotDeleteFood(QGraphicsItem * item);
     void on_pushButton_clicked(); // Слот для запуска игры
     void gameFinish();
-        void updatePos();
-//    void Mouse_current_pos();
 
 private:
     Ui::Widget *ui;

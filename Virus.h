@@ -2,13 +2,15 @@
 #define VIRUS_H
 
 #include <baseCircle.h>
-
+#include <Player.h>
+#include <Enemy.h>
 class Virus: public baseCircle{
     Q_OBJECT
 public:
-    explicit Virus(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
+    explicit Virus(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who,QObject *parent = 0);
     ~Virus();
 signals:
-    void punish(baseCircle* item);
+    void punishEnemy(Enemy* item);
+    void punishPlayer(Player* item);
 };
 #endif // VIRUS_H

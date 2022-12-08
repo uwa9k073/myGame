@@ -1,9 +1,11 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent) : DynamicCircle(_xpos, _ypos, _radius, _numerOfColor, parent)
+Enemy::Enemy(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) :
+    DynamicCircle(_xpos, _ypos, _radius, _numerOfColor, _who, parent)
 {
     //    setFlag(QGraphicsItem::ItemIsMovable);
+    who = 'e';
 }
 
 Enemy::~Enemy()
@@ -22,18 +24,33 @@ void Enemy::setTarget(baseCircle *newTarget)
     target = newTarget;
 }
 
-void Enemy::findTarget(QList<baseCircle *> listOfTarget)
+void Enemy::findTarget(QList<baseCircle *> listOfTarget/* QList<Enemy*> listOfBots*/)
 {
-    double minDistance = GetDistanceTo(listOfTarget[0]);
-    int minIndex = 0;
+    double minDistance1 = GetDistanceTo(listOfTarget[0]) /*,minDistance2 = GetDistanceTo(listOfBots[0])*/;
+    int minIndex1 = 0/*, minIndex2 = 0*/;
+
+    //вычисляем расстояние до статичного кружка
     for (int i = 0; i < listOfTarget.size(); ++i){
-        if (GetDistanceTo(listOfTarget[i])<=minDistance){
-            minDistance = GetDistanceTo(listOfTarget[i]);
-            minIndex = i;
+        if (GetDistanceTo(listOfTarget[i])<=minDistance1){
+            minDistance1 = GetDistanceTo(listOfTarget[i]);
+            minIndex1 = i;
         }
     }
-    target = listOfTarget[minIndex];
-    std::cout << target<< ' ' << minIndex << ' ' << minDistance << ' ' << target->pos().x() << ", " <<target->pos().y() <<'\n';
+
+    //вычисялем расстояние до бота
+//    for (int i = 0; i < listOfBots.size(); ++i){
+//        if (this!=listOfBots[i]){
+//            if (GetDistanceTo(listOfBots[i])<=minDistance2){
+//                minDistance2 = GetDistanceTo(listOfBots[i]);
+//                minIndex2 = i;
+//            }
+//        }
+//    }
+
+//    if (minDistance1<minDistance2)
+        target = listOfTarget[minIndex1];
+//    else
+//        target = listOfTarget[minIndex2];
 }
 
 void Enemy::MoveToTarget()

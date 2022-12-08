@@ -13,25 +13,20 @@ const int DISPLACEMENT_Y = 4;
 class Player: public DynamicCircle{
     Q_OBJECT
 public:
-    explicit Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, QObject *parent = 0);
+    explicit Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who,QObject *parent = 0);
     ~Player();
-    double speed() const;
-    void mouseMove(qreal _x, qreal _y);
-//    void setListOfCircles(const QList<QGraphicsEllipseItem *> &newListOfCircles);
 
-    QPointF getCursorVector() const;
-
+    //    QPointF getCursorVector() const;
+    QPointF getCursorPos() const;
+    void setCursorPos(QPointF newCursorPos);
+    void moveToCursor();
 signals:
-    void signalCheckItem(QGraphicsEllipseItem *item);
+    void signalCheckEnemy(QGraphicsEllipseItem* item);
+
 public slots:
 //   void slotGameTimer(); /// Слот, который отвечает за обработку перемещения треугольника
 private:
-   QPointF cursorVector;
-//   QList<QGraphicsEllipseItem*> listOfCircles;
-
-//    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
-//    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-//    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+   QPointF cursorPos;
 };
 
 #endif // PLAYER_H

@@ -16,22 +16,22 @@ CircleFactory::~CircleFactory()
     delete circleFactoryPtr;
 }
 
-baseCircle *CircleFactory::createBaseCircle(qreal _x, qreal _y, int _radius, int _numerOfColor)
+baseCircle *CircleFactory::createBaseCircle(qreal _x, qreal _y)
 {
-    return new baseCircle(_x, _y, _radius, _numerOfColor,0);
+    return new baseCircle(_x, _y, 10, 1,'f',0);
 }
-Player *CircleFactory::createPlayer(qreal _x, qreal _y, int _radius, int _numerOfColor)
+Player *CircleFactory::createPlayer(qreal _x, qreal _y)
 {
-    return new Player(_x, _y, _radius, _numerOfColor,0);
+    return new Player(_x, _y, 15, 2,'p',0);
 
 }
 
-Enemy *CircleFactory::createEnemy(qreal _x, qreal _y,int _radius, int _numerOfColor)
+Enemy *CircleFactory::createEnemy(qreal _x, qreal _y)
 {
-    return new Enemy(_x,_y, _radius, _numerOfColor, 0);
+    return new Enemy(_x,_y, 15, 3,'e', 0);
 }
 
-Virus *CircleFactory::createVirus(qreal _x, qreal _y, int _radius, int _numerOfColor)
+Virus *CircleFactory::createVirus(qreal _x, qreal _y)
 {
-    return new Virus(_x, _y, _radius, _numerOfColor, 0);
+    return new Virus(_x, _y, 30, 4, 'v',0);
 }
