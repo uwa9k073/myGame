@@ -83,15 +83,15 @@ void Map::gameSlot()
 
     //chtcking for collison with food
     foreach(baseCircle* food, foodList){
-        if(player->HasCollisionWith(food) && player->isBiggerThenOtherCircle(food)){
-            updatePlayer();
-            emit player->signalCheckItem(food);
-        }
         foreach(Enemy* enemy, enemyList){
             if (enemy->HasCollisionWith(food)&&enemy->isBiggerThenOtherCircle(food)){
                 updateEnemy(enemy);
                 emit enemy->signalCheckItem(food);
             }
+        }
+        if(player->HasCollisionWith(food) && player->isBiggerThenOtherCircle(food)){
+            updatePlayer();
+            emit player->signalCheckItem(food);
         }
     }
 
