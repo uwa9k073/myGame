@@ -9,7 +9,6 @@ static qreal randomBetween(int low, int high)
     return (rand() % ((high + 1) - low) + low);
 }
 
-Map *Map::mapPtr = nullptr;
 
 // Map Constructor
 Map::Map()
@@ -25,17 +24,6 @@ Map::Map()
     player = new Player(randomBetween(50, 1050), 15,15,2,'p');
 }
 
-// getInstance return a pointer to Map's object
-Map *Map::getInstance()
-{
-    // if there is no map, creates one
-    if (!mapPtr)
-        mapPtr = new Map();
-
-    return mapPtr;
-}
-// end getInstance function
-
 // Map destructor
 Map::~Map()
 {
@@ -45,8 +33,6 @@ Map::~Map()
     delete player;
     foodList.erase(foodList.cbegin(), foodList.cend());
     virusList.erase(virusList.cbegin(), virusList.cend());
-
-    delete mapPtr; // delete mapPtr pointer
 }
 // end destructor
 

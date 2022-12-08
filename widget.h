@@ -18,6 +18,7 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+    void start();
 
 
 public slots:
@@ -29,6 +30,10 @@ private:
     Map *map;
     QTimer *checkingForGameOverTimer;
     int gameState;
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // WIDGET_H

@@ -15,12 +15,10 @@ constexpr int VIEW_SCALE = 2; // view scale constant
 constexpr int FRAME_MS = 1000; // frame millisecond constant
 
 // Class map handle QGraphicsScene items
-class Map : public QGraphicsScene
-{
-//    Q_OBJECT
+class Map : public QGraphicsScene{
 public:
 
-    static Map* getInstance(); // get a pointer to object
+    explicit Map(); // Map construct
     ~Map() override ; // Map destructor
 
     // dynamic functions
@@ -60,7 +58,6 @@ protected:
     void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
 
 private:
-    Map(); // Map constructor
 
     // attributes
     static Map* mapPtr; // a pointer to Map's object that creates
