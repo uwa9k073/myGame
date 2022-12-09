@@ -13,7 +13,7 @@ public:
 
     baseCircle *getTarget() const;
     void setTarget(baseCircle *newTarget);
-    void findTarget(QList<baseCircle*>,Player* player);
+    void findTarget(QList<baseCircle*>,QList<Enemy*> listOfBots,Player* player);
     void MoveToTarget();
 
 private:

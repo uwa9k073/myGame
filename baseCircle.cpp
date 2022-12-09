@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) : QObject(parent), QGraphicsEllipseItem() {
+baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) :
+    QObject(parent), QGraphicsEllipseItem() {
 //    Xpos=_xpos;
 //    Ypos=_ypos;
     radius = _radius;
@@ -43,13 +44,12 @@ bool baseCircle::HasCollisionWith(baseCircle *tmp)
 
 QRectF baseCircle::boundingRect() const
 {
-    return QRectF( Xpos- radius, Ypos - radius,
+    return QRectF( Xpos - radius, Ypos - radius,
                        QRECT_SCALE * radius, QRECT_SCALE * radius);
 }
 
 void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    //    if (this->nOfColor==1)painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
     switch (this->numerOfColor)
     {
     case 1:

@@ -24,10 +24,10 @@ public:
     // dynamic functions
     void getNewFood(qreal, qreal); // adding new food
 
-    void updateEnemy(Enemy*  item); // update enemy info
+    void updateEnemy(Enemy*  item, int x); // update enemy info
     void getNewEnemy(qreal x, qreal y);//adding new enemy
 
-    void updatePlayer(); // update player info
+    void updatePlayer(int x); // update player info
     void getNewPlayer(qreal x, qreal y);//adding new player
 
     void getNewVirus(qreal x, qreal y);

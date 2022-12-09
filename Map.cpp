@@ -21,7 +21,7 @@ Map::Map()
     timerCreateFood = new QTimer();
     timer = new QTimer();
 
-    player = new Player(randomBetween(50, 1050), 15,15,2,'p');
+    player = new Player(300, 300,15,2,'p', 0);
 }
 
 // Map destructor
@@ -69,13 +69,13 @@ void Map::gameSlot()
 
     //find target for each enemy and chekin clollison with player
     foreach(Enemy* enemy, enemyList){
-        enemy->findTarget(foodList, player);
+        enemy->findTarget(foodList, enemyList,player);
         enemy->MoveToTarget();
         if (enemy->HasCollisionWith(player)){
             if (enemy->isBiggerThenOtherCircle(player))
                 whoWin = 'e';//set value to whoWin
             else{
-                updatePlayer();
+                updatePlayer((enemy->getRadius()/5)+1);
                 emit player->signalCheckEnemy(enemy);
             }
         }
@@ -85,12 +85,13 @@ void Map::gameSlot()
     foreach(baseCircle* food, foodList){
         foreach(Enemy* enemy, enemyList){
             if (enemy->HasCollisionWith(food)&&enemy->isBiggerThenOtherCircle(food)){
-                updateEnemy(enemy);
+                updateEnemy(enemy,(food->getRadius()/5)+1);
                 emit enemy->signalCheckItem(food);
             }
         }
+
         if(player->HasCollisionWith(food) && player->isBiggerThenOtherCircle(food)){
-            updatePlayer();
+            updatePlayer((food->getRadius()/5)+1);
             emit player->signalCheckItem(food);
         }
     }
@@ -165,12 +166,12 @@ void Map::slotDeleteEnemy(QGraphicsEllipseItem *item)
 }
 
 // update bot radius and score
-void Map::updateEnemy(Enemy* item)
+void Map::updateEnemy(Enemy* item, int x)
 {
     if (item->getScore()+1>220){
         whoWin = 'e';
     }else {
-        item->updateInfo(1);
+        item->updateInfo(x);
     }
 }
 // mouseMoveEvent handle mouse movement event
@@ -183,12 +184,12 @@ void Map::updateEnemy(Enemy* item)
 // end mouseMoveEvent
 
 // update player radius and score
-void Map::updatePlayer()
+void Map::updatePlayer(int x)
 {
     if(player->getScore()+1>220)
         whoWin = 'p';
     else
-        player->updateInfo(1);
+        player->updateInfo(x);
 }
 
 // getter to gameFinish

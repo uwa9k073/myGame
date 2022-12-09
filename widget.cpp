@@ -26,7 +26,7 @@ void Widget::start()
     ui->grV->setRenderHint(QPainter::Antialiasing);    /// Устанавливаем сглаживание
     ui->grV->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по вертикали
     ui->grV->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по горизонтали
-    map->setSceneRect(0,0,1200,700); /// Устанавливаем область графической сцены
+    map->setSceneRect(0,0,1200,600); /// Устанавливаем область графической сцены
     map->gameStart(ui->textEdit->toPlainText().toInt());
     connect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::gameFinish);
     checkingForGameOverTimer->start(10);
@@ -46,6 +46,7 @@ void Widget::gameFinish()
         messageBox.setText((map->getWhoWin()=='p' ? "You win!":"You lost!"));
         messageBox.exec();
         ui->pushButton->setEnabled(true);
+//        map = nullptr;
     }
 }
 
