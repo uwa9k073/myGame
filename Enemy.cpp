@@ -24,37 +24,24 @@ void Enemy::setTarget(baseCircle *newTarget)
     target = newTarget;
 }
 
-void Enemy::findTarget(QList<baseCircle *> listOfTarget,QList<Enemy*> listOfBots, Player* player)
+void Enemy::findTarget(QList<baseCircle *> listOfTarget, Player* player)
 {
-    double minDistance1 = 1000000 , minDistance2 = 1000000, minDistance3 = GetDistanceTo(player);
-    int minIndex1 = 0, minIndex2 = 0;
-
+    double minDistance1 = 1000000;
+    int minIndex1 = 0;
     //вычисляем расстояние до статичного кружка
     for (int i = 0; i < listOfTarget.size(); ++i){
-        if (GetDistanceTo(listOfTarget[i])<=minDistance1 && isBiggerThenOtherCircle(listOfTarget[i])){
-            minDistance1 = GetDistanceTo(listOfTarget[i]);
-            minIndex1 = i;
-        }
-    }
-
-    //вычисялем расстояние до бота
-    for (int i = 0; i < listOfBots.size(); ++i){
-        if (this!=listOfBots[i]){
-            if (GetDistanceTo(listOfBots[i])<=minDistance2){
-                minDistance2 = GetDistanceTo(listOfBots[i]);
-                minIndex2 = i;
+        if (listOfTarget[i]->scene()!=nullptr && this->scene()!=nullptr){
+            if (GetDistanceTo(listOfTarget[i])<=minDistance1 && isBiggerThenOtherCircle(listOfTarget[i])){
+                minDistance1 = GetDistanceTo(listOfTarget[i]);
+                minIndex1 = i;
             }
         }
     }
 
-    if(minDistance1>minDistance3<minDistance2 && isBiggerThenOtherCircle(player))
-        target= player;
-    else{
-        if(minDistance1<minDistance2 && isBiggerThenOtherCircle(listOfTarget[minIndex1]))
-            target = listOfTarget[minIndex1];
-        else if(minDistance2<minDistance1 && isBiggerThenOtherCircle(listOfBots[minIndex2]))
-            target = listOfBots[minIndex2];
-    }
+    if(GetDistanceTo(player)<minDistance1 && isBiggerThenOtherCircle(player)&& player->scene()!=nullptr && this->scene()!=nullptr)
+        target = player;
+    else
+        target = listOfTarget[minIndex1];
 
 }
 

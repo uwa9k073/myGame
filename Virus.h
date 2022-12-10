@@ -12,5 +12,6 @@ public:
 signals:
     void punishEnemy(Enemy* item);
     void punishPlayer(Player* item);
+    void signalDeleteEnemy(baseCircle* item);
 };
 #endif // VIRUS_H

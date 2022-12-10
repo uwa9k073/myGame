@@ -1,19 +1,13 @@
 #include "CircleFactory.h"
 
-
-CircleFactory* CircleFactory::circleFactoryPtr = nullptr;
-
-CircleFactory *CircleFactory::getInstance()
+CircleFactory::CircleFactory()
 {
-    if (!circleFactoryPtr)
-            circleFactoryPtr = new CircleFactory();
 
-    return circleFactoryPtr;
 }
 
 CircleFactory::~CircleFactory()
 {
-    delete circleFactoryPtr;
+
 }
 
 baseCircle *CircleFactory::createBaseCircle(qreal _x, qreal _y, int r)

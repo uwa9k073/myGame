@@ -21,7 +21,6 @@ public:
     void setCursorPos(QPointF newCursorPos);
     void moveToCursor();
 signals:
-    void signalCheckEnemy(QGraphicsEllipseItem* item);
 
 public slots:
 //   void slotGameTimer(); /// Слот, который отвечает за обработку перемещения треугольника

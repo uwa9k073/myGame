@@ -9,7 +9,8 @@ Widget::Widget(QWidget *parent) :
     this->resize(1280,720);          /// Задаем размеры виджета, то есть окна
     this->setFixedSize(1280,720);    /// Фиксируем размеры виджета
 
-    checkingForGameOverTimer= new QTimer();
+    checkingForGameOverTimer = new QTimer();
+    updateScreenTimer = new QTimer();
 
     gameState = GAME_STOPED;
 }
@@ -28,6 +29,8 @@ void Widget::start()
     ui->grV->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); /// Отключаем скроллбар по горизонтали
     map->setSceneRect(0,0,1200,600); /// Устанавливаем область графической сцены
     map->gameStart(ui->textEdit->toPlainText().toInt());
+    ui->textEdit->setText("");
+    connect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::centerOnPlayer);
     connect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::gameFinish);
     checkingForGameOverTimer->start(10);
 
@@ -40,14 +43,21 @@ void Widget::gameFinish()
 {
     if((map->getWhoWin()=='p')||(map->getWhoWin()=='e')){
         checkingForGameOverTimer->stop();
+        disconnect(checkingForGameOverTimer, &QTimer::timeout, this, &Widget::gameFinish);
         map->gameFinished();
         gameState = GAME_STOPED;
         QMessageBox messageBox; // create a messageBox
         messageBox.setText((map->getWhoWin()=='p' ? "You win!":"You lost!"));
         messageBox.exec();
         ui->pushButton->setEnabled(true);
-//        map = nullptr;
+        map = nullptr;
     }
+}
+
+void Widget::centerOnPlayer()
+{
+    ui->grV->ensureVisible(map->getPlayer(), 100, 100);
+    ui->grV->centerOn(map->getPlayer());
 }
 
 void Widget::on_pushButton_clicked(){

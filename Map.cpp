@@ -1,10 +1,11 @@
 #include "Map.h"
 
+
 #include <iostream>
 
 
 //getRandom func
-static qreal randomBetween(int low, int high)
+static int randomBetween(int low, int high)
 {
     return (rand() % ((high + 1) - low) + low);
 }
@@ -47,9 +48,11 @@ void Map::gameStart(int numOfEnemies)
     }
     for(int i = 0; i < numOfEnemies; ++i)
         getNewEnemy(randomBetween(50, 1050), randomBetween(50, 550));
-    for (int i = 0; i< enemyList.size(); ++i)
+    for (int i = 0; i< enemyList.size(); ++i){
         connect(enemyList[i], &Enemy::signalCheckItem, this, &Map::slotDeleteFood);//connect signalCheckItem() to slotDeleteFood()
-    connect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);
+//        connect(enemyList[i], &Enemy::signalCheckEnemy, this, &Map::slotDeleteEnemy);//connect signalCheckEnemy() to slotDeleteEnemy()
+    }
+    connect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);//connect timeout() of timerCreateFood to slotCreateFood()
     timerCreateFood->start(FRAME_MS/1000);
     connect(timer, &QTimer::timeout, this, &Map::gameSlot); // connect timeout() to advance()
     timer->start(FRAME_MS/50);
@@ -59,17 +62,20 @@ void Map::gameFinished()
 {
     timer->stop();
     timerCreateFood->stop();
-    disconnect(timerCreateFood, &QTimer::timeout, this, &Map::slotCreateFood);
-    disconnect(timer, &QTimer::timeout, this, &Map::advance);
 }
+
+
+
+
 // overloading advance function of QGraphicsScene for handle animation
 void Map::gameSlot()
 {
+    std::cout << "NumOfEnemies: "<<enemyList.size() <<'\n';
     player->moveToCursor();//movin player
 
     //find target for each enemy and chekin clollison with player
     foreach(Enemy* enemy, enemyList){
-        enemy->findTarget(foodList, enemyList,player);
+        enemy->findTarget(foodList, player);
         enemy->MoveToTarget();
         if (enemy->HasCollisionWith(player)){
             if (enemy->isBiggerThenOtherCircle(player))
@@ -96,6 +102,7 @@ void Map::gameSlot()
         }
     }
 
+    //chekin for collision with virus
     foreach(Virus* virus, virusList){
         if (virus->HasCollisionWith(player))
             emit virus->punishPlayer(player);
@@ -117,7 +124,7 @@ void Map::slotCreateFood()
 // getNewFood add more enemies to map
 void Map::getNewEnemy(qreal x, qreal y)
 {
-    Enemy *tmp = CircleFactory::getInstance()->createEnemy(x, y); // creates an object from food class
+    Enemy *tmp = cf.createEnemy(x, y); // creates an object from food class
     addItem(tmp);// add food item to scene
     enemyList.append(tmp);// add food item to foodList
 }
@@ -126,17 +133,17 @@ void Map::getNewEnemy(qreal x, qreal y)
 // getNewFood add more food to map
 void Map::getNewFood(qreal x, qreal y)
 {
-    baseCircle *food = CircleFactory::getInstance()->createBaseCircle(x, y,randomBetween(1, 15)); // creates an object from food class
+    baseCircle *food = cf.createBaseCircle(x, y,randomBetween(1, 15)); // creates an object from food class
     addItem(food);// add food item to scene
     foodList.append(food);// add food item to foodList
 }
 // end getNewFood
 
-void Map::slotDeleteFood(QGraphicsEllipseItem *item)
+void Map::slotDeleteFood(baseCircle *item)
 {
-    foreach (QGraphicsEllipseItem *el, foodList)
+    foreach (baseCircle *el, foodList)
     {
-        if (el == item)
+        if (el == item && el->scene()!=nullptr)
         {
             this->removeItem(el);
             foodList.removeOne(el);
@@ -153,12 +160,12 @@ void Map::slotDeleteEnemy(QGraphicsEllipseItem *item)
     }
     else{
         foreach(Enemy* el, enemyList){
-            if (el==item){
+            if (el==item && el->scene()!=nullptr){
                 disconnect(el, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
                 this->removeItem(el);
                 enemyList.removeOne(el);
                 delete el;
-
+                std::cout<<"Enemy is delete\n";
             }
         }
     }
@@ -201,7 +208,7 @@ char Map::getWhoWin() const
 //  add new virus to scene
  void Map::getNewVirus( qreal x, qreal y)
 {
-     Virus* virus = CircleFactory::getInstance() -> createVirus( x, y); // creates an object from virus class
+     Virus* virus = cf.createVirus( x, y); // creates an object from virus class
      addItem( virus ); // add virus item to scene
      virusList.append( virus ); // add virus item to foodList
  }
@@ -209,14 +216,14 @@ char Map::getWhoWin() const
  void Map::punish(baseCircle *item)
  {
      if(item->getWho()=='e'){
-        if (item->getRadius()<=2) {
+        if (item->getRadius()-2<=0) {
             if(enemyList.size()==1){
                 whoWin='p';
-            }
-            else{
+            } else {
                 foreach(Enemy* el, enemyList){
-                    if (el==item){
+                    if (el==item && el->scene()!=nullptr){
                         disconnect(el, &Enemy::signalCheckItem, this, &Map::slotDeleteFood);
+                        disconnect(el, &Enemy::signalCheckEnemy, this, &Map::slotDeleteEnemy);
                         this->removeItem(el);
                         enemyList.removeOne(el);
                         delete el;
@@ -227,7 +234,7 @@ char Map::getWhoWin() const
             item->updateInfo(-2);
         }
      }else{
-         if(item->getRadius()<=2){
+         if(item->getRadius()-2<=0){
              whoWin='e';
          }else{
              item->updateInfo(-2);
@@ -236,9 +243,8 @@ char Map::getWhoWin() const
 
  }
 
-// add new player
- void Map::getNewPlayer(qreal x, qreal y)
-{
-    Player* player = CircleFactory::getInstance()->createPlayer( x, y); // creates an object from player class
-    addItem(player); // add player item to scene
-}
+ QGraphicsEllipseItem *Map::getPlayer() const
+ {
+     return player;
+
+ }

@@ -26,6 +26,7 @@ public:
     void checkCollision();
 signals:
     void signalCheckItem(baseCircle *item);
+    void signalCheckEnemy(baseCircle* item);
 };
 
 #endif // DYNAMICCIRCLE_H

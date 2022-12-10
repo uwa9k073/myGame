@@ -13,13 +13,17 @@ baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor,
     who = _who;
 }
 
-baseCircle::~baseCircle() {}
+baseCircle::~baseCircle() {
+}
 
 double baseCircle::GetDistanceTo(baseCircle *tmp)
 {
-    double d_x = pow(pos().x() - tmp->pos().x(), 2);
-    double d_y = pow(pos().y() - tmp->pos().y(), 2);
-    return sqrt(d_x + d_y);
+    if(tmp->scene()!=nullptr && this->scene()!=nullptr){
+        double d_x = pow(pos().x() - tmp->pos().x(), 2);
+        double d_y = pow(pos().y() - tmp->pos().y(), 2);
+        return sqrt(d_x + d_y);
+    }
+    return 1000000;
 }
 
 double baseCircle::GetDistanceTo(QPointF tmp){
@@ -35,8 +39,8 @@ char baseCircle::getWho() const
 
 bool baseCircle::HasCollisionWith(baseCircle *tmp)
 {
-    if ((GetDistanceTo(tmp))<(radius+tmp->getRadius()))
-        return true;
+    if(this->scene()!=nullptr && tmp->scene()!=nullptr)
+        return ((GetDistanceTo(tmp))<=(radius+tmp->getRadius()));
     return false;
 }
 
@@ -44,7 +48,7 @@ bool baseCircle::HasCollisionWith(baseCircle *tmp)
 
 QRectF baseCircle::boundingRect() const
 {
-    return QRectF( Xpos - radius, Ypos - radius,
+    return QRectF( - radius, - radius,
                        QRECT_SCALE * radius, QRECT_SCALE * radius);
 }
 
@@ -67,7 +71,7 @@ void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawEllipse(boundingRect());
     if(who=='p'||who=='e'){
         painter->setPen(Qt::black);
-        painter->drawText(Xpos-DISPLACEMENT-3, Ypos+DISPLACEMENT, QString::number(this->score));
+        painter->drawText(-DISPLACEMENT-3, DISPLACEMENT, QString::number(this->score));
     }
 
     Q_UNUSED(option);

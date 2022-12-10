@@ -31,5 +31,7 @@ double DynamicCircle::speed() const
 
 bool DynamicCircle::isBiggerThenOtherCircle(const baseCircle *tmp)
 {
-    return radius > tmp->getRadius();
+    if (tmp->scene()!=nullptr && this->scene()!=nullptr)
+        return radius >= tmp->getRadius();
+    return false;
 }

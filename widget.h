@@ -24,11 +24,13 @@ public:
 public slots:
     void on_pushButton_clicked(); // Слот для запуска игры
     void gameFinish();
+    void centerOnPlayer();
 
 private:
     Ui::Widget *ui;
     Map *map;
     QTimer *checkingForGameOverTimer;
+    QTimer *updateScreenTimer;
     int gameState;
 
     // QWidget interface

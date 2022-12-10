@@ -36,6 +36,7 @@ public:
     char getWhoWin() const;
     void gameStart(int numOfEnemies);
     void gameFinished();
+    QGraphicsEllipseItem* getPlayer() const;
 
     void punish(baseCircle* item);
 
@@ -44,7 +45,7 @@ signals:
 
 public slots:
     void slotCreateFood();
-    void slotDeleteFood(QGraphicsEllipseItem*);
+    void slotDeleteFood(baseCircle*);
     void slotDeleteEnemy(QGraphicsEllipseItem*);
 
     void gameSlot();  // this function is overloaded from QGraphicsScene for handle animation thing
@@ -58,9 +59,6 @@ protected:
     void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
 
 private:
-
-    // attributes
-    static Map* mapPtr; // a pointer to Map's object that creates
     QTimer* timer; // A pointer that hold time
     QTimer* timerCreateFood;
     QList<baseCircle*> foodList;
@@ -68,6 +66,7 @@ private:
     QList<Enemy*> enemyList;
     Player* player;
     char whoWin;
+    CircleFactory cf;
 
 
 };
