@@ -2,10 +2,9 @@
 
 #include <iostream>
 
-baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) :
-    QObject(parent), QGraphicsEllipseItem() {
-//    Xpos=_xpos;
-//    Ypos=_ypos;
+baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) : QObject(parent), QGraphicsEllipseItem()
+{
+
     radius = _radius;
     numerOfColor = _numerOfColor;
     score = _radius;
@@ -13,23 +12,19 @@ baseCircle::baseCircle(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor,
     who = _who;
 }
 
-baseCircle::~baseCircle() {
+baseCircle::~baseCircle()
+{
 }
 
 double baseCircle::GetDistanceTo(baseCircle *tmp)
 {
-    if(tmp->scene()!=nullptr && this->scene()!=nullptr){
+    if (tmp->scene() != nullptr && this->scene() != nullptr)
+    {
         double d_x = pow(pos().x() - tmp->pos().x(), 2);
         double d_y = pow(pos().y() - tmp->pos().y(), 2);
         return sqrt(d_x + d_y);
     }
     return 1000000;
-}
-
-double baseCircle::GetDistanceTo(QPointF tmp){
-    double d_x = pow(pos().x() - tmp.x(), 2);
-    double d_y = pow(pos().y() - tmp.y(), 2);
-    return sqrt(d_x + d_y);
 }
 
 char baseCircle::getWho() const
@@ -39,17 +34,15 @@ char baseCircle::getWho() const
 
 bool baseCircle::HasCollisionWith(baseCircle *tmp)
 {
-    if(this->scene()!=nullptr && tmp->scene()!=nullptr)
-        return ((GetDistanceTo(tmp))<=(radius+tmp->getRadius()));
+    if (this->scene() != nullptr && tmp->scene() != nullptr)
+        return ((GetDistanceTo(tmp)) <= (radius + tmp->getRadius()));
     return false;
 }
 
-
-
 QRectF baseCircle::boundingRect() const
 {
-    return QRectF( - radius, - radius,
-                       QRECT_SCALE * radius, QRECT_SCALE * radius);
+    return QRectF(-radius, -radius,
+                  2 * radius, 2 * radius);
 }
 
 void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -69,9 +62,10 @@ void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
     }
     painter->drawEllipse(boundingRect());
-    if(who=='p'||who=='e'){
+    if (who == 'p' || who == 'e')
+    {
         painter->setPen(Qt::black);
-        painter->drawText(-DISPLACEMENT-3, DISPLACEMENT, QString::number(this->score));
+        painter->drawText(-8, 5, QString::number(this->score));
     }
 
     Q_UNUSED(option);
@@ -80,8 +74,8 @@ void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 void baseCircle::updateInfo(int x)
 {
-    radius+=x;
-    score+=x;
+    radius += x;
+    score += x;
 }
 
 int baseCircle::getScore() const
@@ -99,18 +93,6 @@ QPainterPath baseCircle::shape() const
     QPainterPath path;
     path.addEllipse(boundingRect());
     return path;
-}
-
-void baseCircle::setYpos(qreal newYpos)
-{
-    Ypos = newYpos;
-    setX(Ypos);
-}
-
-void baseCircle::setXpos(qreal newXpos)
-{
-    Xpos = newXpos;
-    setX(Xpos);
 }
 
 int baseCircle::getNumerOfColor() const
@@ -131,14 +113,4 @@ int baseCircle::getRadius() const
 void baseCircle::setRadius(int newRadius)
 {
     radius = newRadius;
-}
-
-qreal baseCircle::getYpos() const
-{
-    return Ypos;
-}
-
-qreal baseCircle::getXpos() const
-{
-    return Xpos;
 }

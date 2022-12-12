@@ -1,7 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-
 #include <QGraphicsScene>
 #include <QCursor>
 #include <QKeyEvent>
@@ -11,64 +10,52 @@
 #include <QMessageBox>
 #include "CircleFactory.h"
 
-constexpr int VIEW_SCALE = 2; // view scale constant
+constexpr int VIEW_SCALE = 2;  // view scale constant
 constexpr int FRAME_MS = 1000; // frame millisecond constant
 
-// Class map handle QGraphicsScene items
-class Map : public QGraphicsScene{
+class Map : public QGraphicsScene
+{
 public:
-
-    explicit Map(); // Map construct
-    ~Map() override ; // Map destructor
+    explicit Map();  // конструктор
+    ~Map() override; // деструктор
 
     // dynamic functions
-    void getNewFood(qreal, qreal); // adding new food
+    void getNewFood(qreal, qreal); // дбобавление новой еды
 
-    void updateEnemy(Enemy*  item, int x); // update enemy info
-    void getNewEnemy(qreal x, qreal y);//adding new enemy
+    void updateEnemy(Enemy *item, int x); // обновление иформации бота
+    void getNewEnemy(qreal x, qreal y);   // добавление нового бота
 
-    void updatePlayer(int x); // update player info
-    void getNewPlayer(qreal x, qreal y);//adding new player
+    void updatePlayer(int x);            // обновления информации игрока
+    void getNewPlayer(qreal x, qreal y); // добавление нового игрока
 
-    void getNewVirus(qreal x, qreal y);
+    void getNewVirus(qreal x, qreal y); // добавление нового вируса
 
-    // A list of pointers that hold food
     char getWhoWin() const;
-    void gameStart(int numOfEnemies);
-    void gameFinished();
-    QGraphicsEllipseItem* getPlayer() const;
+    void gameStart(int numOfEnemies);        // функция начала игры
+    void gameFinished();                     // функция конца игры
+    QGraphicsEllipseItem *getPlayer() const; //
 
-    void punish(baseCircle* item);
-
-signals:
-    void signalGameOver();
+    void punish(baseCircle *item); // функция нанемения урона объекту
 
 public slots:
-    void slotCreateFood();
-    void slotDeleteFood(baseCircle*);
-    void slotDeleteEnemy(QGraphicsEllipseItem*);
+    void slotCreateFood();              // слот создания еды
+    void slotDeleteFood(baseCircle *);  // слот удаления еды
+    void slotDeleteEnemy(baseCircle *); // слот удаления ботов
 
-    void gameSlot();  // this function is overloaded from QGraphicsScene for handle animation thing
-
+    void gameSlot(); // слот игровой логики
 
 protected:
-
-
-    // events function
-//    void keyPressEvent(QKeyEvent *event) override ;
-    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override ; // Events function
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override; // Events function
 
 private:
-    QTimer* timer; // A pointer that hold time
-    QTimer* timerCreateFood;
-    QList<baseCircle*> foodList;
-    QList<Virus* > virusList;
-    QList<Enemy*> enemyList;
-    Player* player;
-    char whoWin;
-    CircleFactory cf;
-
-
+    QTimer *timer;                // указатель хранящий основной игровой таймер
+    QTimer *timerCreateFood;      // указатель хранящий
+    QList<baseCircle *> foodList; // лист указателей на еду
+    QList<Virus *> virusList;     // лист указателей на вирусы
+    QList<Enemy *> enemyList;     // лист указателей на ботов
+    Player *player;               // указатель на игрока
+    char whoWin;                  // переменная содержащая победителя
+    CircleFactory cf;             // вспомогательный класс, который позволяет проще создавать объекты
 };
 
 #endif // MAP_H

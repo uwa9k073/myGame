@@ -8,7 +8,10 @@
 #define GAME_STARTED 1
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class Widget; }
+namespace Ui
+{
+    class Widget;
+}
 QT_END_NAMESPACE
 
 class Widget : public QWidget
@@ -18,24 +21,22 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    void start();
-
+    void start(); // функция запуска игры
 
 public slots:
     void on_pushButton_clicked(); // Слот для запуска игры
-    void gameFinish();
-    void centerOnPlayer();
+    void gameFinish();            // слот для завершения игры
+    void centerOnPlayer();        // слот фокусирования на игроке
 
 private:
     Ui::Widget *ui;
-    Map *map;
+    Map *map; // игровое поле
     QTimer *checkingForGameOverTimer;
-    QTimer *updateScreenTimer;
-    int gameState;
+    int gameState; // состояние игры
 
     // QWidget interface
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override; //
 };
 
 #endif // WIDGET_H

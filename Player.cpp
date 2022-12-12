@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who,QObject *parent):
-    DynamicCircle(_xpos,_ypos,_radius, _numerOfColor, _who, parent){
-    setFlag(QGraphicsItem::ItemIsFocusable);
+Player::Player(qreal _xpos, qreal _ypos, int _radius, int _numerOfColor, char _who, QObject *parent) : DynamicCircle(_xpos, _ypos, _radius, _numerOfColor, _who, parent)
+{
+    setFlag(QGraphicsItem::ItemIsFocusable); // делаем фокус на игрока
 }
-Player::~Player(){}
+Player::~Player() {}
 
 QPointF Player::getCursorPos() const
 {
@@ -18,7 +18,5 @@ void Player::setCursorPos(QPointF newCursorPos)
 
 void Player::moveToCursor()
 {
-    MoveToPoint(cursorPos);
+    MoveToPoint(cursorPos); // двигаем игрока к курсору
 }
-
-
