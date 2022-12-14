@@ -2,6 +2,8 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QMessageBox>
+#include <QKeyEvent>
 #include <Map.h>
 
 #define GAME_STOPED 0
@@ -29,10 +31,10 @@ public slots:
     void centerOnPlayer();        // слот фокусирования на игроке
 
 private:
-    Ui::Widget *ui;
+    Ui::Widget *ui;//указатель на форму интерфейса
     Map *map; // игровое поле
-    QTimer *checkingForGameOverTimer;
-    int gameState; // состояние игры
+    QTimer *checkingForGameOverTimer;//указатель на таймер проверки
+    bool gameState; // состояние игры
 
     // QWidget interface
 protected:

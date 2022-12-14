@@ -47,7 +47,7 @@ QRectF baseCircle::boundingRect() const
 
 void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    switch (this->numerOfColor)
+    switch (this->numerOfColor)//выбираем цвет заливки
     {
     case 1:
         painter->setBrush(QBrush(Qt::blue, Qt::SolidPattern));
@@ -61,15 +61,15 @@ void baseCircle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     case 4:
         painter->setBrush(QBrush(Qt::yellow, Qt::SolidPattern));
     }
-    painter->drawEllipse(boundingRect());
+    painter->drawPath(shape());//рисуем круг
     if (who == 'p' || who == 'e')
     {
         painter->setPen(Qt::black);
-        painter->drawText(-8, 5, QString::number(this->score));
+        painter->drawText(-8, 5, QString::number(this->score));//рисуем счет
     }
 
     Q_UNUSED(option);
-    Q_UNUSED(widget);
+    Q_UNUSED(widget);//уведомляем о том, что этот параметр не был использован
 }
 
 void baseCircle::updateInfo(int x)

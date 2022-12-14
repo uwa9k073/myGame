@@ -8,9 +8,6 @@
 #include <QtMath>
 #include <iostream>
 
-constexpr int BOARD_WIDTH = 1100;
-constexpr int BOARD_HEIGHT = 600;
-
 class baseCircle : public QObject, public QGraphicsEllipseItem
 {
     Q_OBJECT
@@ -31,12 +28,14 @@ public:
 
     char getWho() const;
 
+
+    bool HasCollisionWith(baseCircle *tmp);                                                          // проверяет столкновение с объектом
+
 protected:
     QRectF boundingRect() const override;                                                            // определяет прямоугольник, в котором будет нарисован круг
     QPainterPath shape() const override;                                                             // сужает гранцы прямоугольника объекта до круга
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override; // функция отрисовщик
     double GetDistanceTo(baseCircle *tmp);                                                           // определяет расстояние до объекта по теореме Пифагора
-    bool HasCollisionWith(baseCircle *tmp);                                                          // проверяет столкновение с объектом
     int radius, numerOfColor, score;
     char who;
 };

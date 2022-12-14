@@ -8,8 +8,8 @@ void DynamicCircle::MoveToPoint(baseCircle *tmp)
 {
     double alpha = atan2(tmp->pos().y() - pos().y(), tmp->pos().x() - pos().x()); /*вычисляем угол прямоугльного треугольника,
      гипотенуза которого является кратчайшим путем между двумя объектами*/
-    qreal dx = speed() * cos(alpha);                                              // вычисляем расстояние по Ox, которое должнен пройти объект
-    qreal dy = speed() * sin(alpha);                                              // вычисляем расстояние по Oy, которое должне пройти объект
+    qreal dx = speed() * cos(alpha);                                              // вычисляем расстояние по Ox, которое должен пройти объект
+    qreal dy = speed() * sin(alpha);                                              // вычисляем расстояние по Oy, которое должен пройти объект
     moveBy(dx, dy);                                                               // двигаем объект на dx и dy
 }
 

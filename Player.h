@@ -3,9 +3,6 @@
 
 #include <DynamicCircle.h>
 
-const int DISPLACEMENT_X = 11;
-const int DISPLACEMENT_Y = 4;
-
 class Player : public DynamicCircle
 {
     Q_OBJECT

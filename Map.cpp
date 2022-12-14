@@ -60,67 +60,52 @@ void Map::gameFinished()
     timerCreateFood->stop();
 }
 
-// overloading advance function of QGraphicsScene for handle animation
-void Map::gameSlot()
-{
+void Map::gameSlot() {
     player->moveToCursor(); // movin player
-
     // find target for each enemy and chekin collison with player
-    foreach (Enemy *enemy, enemyList)
-    {
+    foreach (Enemy *enemy, enemyList){
         enemy->findTarget(foodList, player); // findin target for enemy
         enemy->MoveToTarget();               // movin enemy to his target
         if (enemy->HasCollisionWith(player))
         {
             if (enemy->isBiggerThenOtherCircle(player))
                 whoWin = 'e'; // set value to whoWin
-            else
-            {
+            else {
                 updatePlayer((enemy->getRadius() / 5) + 1); // updating player info
                 emit player->signalCheckEnemy(enemy);
             }
         }
     }
-
     // checking for collison with food
-    foreach (baseCircle *food, foodList)
-    {
+    foreach (baseCircle *food, foodList) {
         foreach (Enemy *enemy, enemyList)
         {
-            if (enemy->HasCollisionWith(food) && enemy->isBiggerThenOtherCircle(food))
-            {
+            if (enemy->HasCollisionWith(food) && enemy->isBiggerThenOtherCircle(food)) {
                 updateEnemy(enemy, (food->getRadius() / 5) + 1); // updating enemy info
                 emit enemy->signalCheckItem(food);
             }
         }
 
-        if (player->HasCollisionWith(food) && player->isBiggerThenOtherCircle(food))
-        {
+        if (player->HasCollisionWith(food) && player->isBiggerThenOtherCircle(food)) {
             updatePlayer((food->getRadius() / 5) + 1); // updating player info
             emit player->signalCheckItem(food);
         }
     }
-
     // chekin for collision with virus
-    foreach (Virus *virus, virusList)
-    {
+    foreach (Virus *virus, virusList) {
         if (virus->HasCollisionWith(player))
             emit virus->punishCircle(player); // punsih player
-        foreach (Enemy *enemy, enemyList)
-        {
+        foreach (Enemy *enemy, enemyList) {
             if (virus->HasCollisionWith(enemy))
                 emit virus->punishCircle(enemy); // punish enemy
         }
-        foreach (baseCircle *food, foodList)
-        {
-            if (virus->HasCollisionWith(food))
-            {
+        foreach (baseCircle *food, foodList) {
+            if (virus->HasCollisionWith(food)) {
                 emit virus->punishCircle(food); // punish food
             }
         }
     }
 }
-// end advance function
 
 void Map::slotCreateFood()
 {
@@ -223,22 +208,14 @@ void Map::getNewVirus(qreal x, qreal y)
     virusList.append(virus);             // add virus item to foodList
 }
 
-void Map::punish(baseCircle *item)
-{
-    if (item->getWho() == 'e')
-    {
-        if (item->getRadius() - 2 <= 0)
-        {
-            if (enemyList.size() == 1)
-            {
+void Map::punish(baseCircle *item) {
+    if (item->getWho() == 'e') {
+        if (item->getRadius() - 2 <= 0) {
+            if (enemyList.size() == 1) {
                 whoWin = 'p'; // присваиваем победу игроку, если удаляем последний элемент из enemyList
-            }
-            else
-            {
-                foreach (Enemy *el, enemyList)
-                {
-                    if (el == item && el->scene() == item->scene() && el->scene() == this)
-                    {                                                                        // проверяем соответствие тем
+            } else {
+                foreach (Enemy *el, enemyList) {
+                    if (el == item && el->scene() == item->scene() && el->scene() == this) { // проверяем соответствие тем
                         disconnect(el, &Enemy::signalCheckItem, this, &Map::slotDeleteFood); // отключаем signalCheckItem() от slotDeleteFood;
                         this->removeItem(el);                                                // удаляем элемент со сцены
                         enemyList.removeOne(el);                                             // удаляем элемент из списка
@@ -246,29 +223,18 @@ void Map::punish(baseCircle *item)
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             item->updateInfo(-2); // обновляем информацию о боте
         }
-    }
-    else if (item->getWho() == 'p')
-    {
-        if (item->getRadius() - 2 <= 0)
-        {
+    } else if (item->getWho() == 'p') {
+        if (item->getRadius() - 2 <= 0) {
             whoWin = 'e'; // присваивем победу ботам, если размер игрока становится не больши нуля
-        }
-        else
-        {
+        } else {
             item->updateInfo(-2); // обновляем информацию игрока
         }
-    }
-    else
-    {
-        foreach (baseCircle *el, foodList)
-        {
-            if (el == item && el->scene() == item->scene() && el->scene() == this) // проверяем соответствие сцен
-            {
+    } else {
+        foreach (baseCircle *el, foodList) {
+            if (el == item && el->scene() == item->scene() && el->scene() == this) { // проверяем соответствие сцен
                 this->removeItem(el);   // удаляем элемент со сцены
                 foodList.removeOne(el); // удаляем элемент из списка еды
                 delete el;              // удаляем на совсем
